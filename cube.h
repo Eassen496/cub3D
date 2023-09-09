@@ -3,15 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   cube.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ale-roux <ale-roux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abitonti <abitonti@student.42mulhouse.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 21:11:39 by ale-roux          #+#    #+#             */
-/*   Updated: 2023/08/29 21:18:31 by ale-roux         ###   ########.fr       */
+/*   Updated: 2023/09/09 23:43:55 by abitonti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUBE_H
 # define CUBE_H
+
+# include <fcntl.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include <stdio.h>
+# include "MLX42.h"
 
 typedef struct s_utils
 {
@@ -33,8 +39,12 @@ typedef struct s_source
 
 typedef struct s_cube
 {
+	mlx_t		*mlx;
+	mlx_image_t	*image;
 	t_source	*source;
 	t_utils		utils;
 }				t_cube;
+
+char	*get_next_line(int fd);
 
 #endif

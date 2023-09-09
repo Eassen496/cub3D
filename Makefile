@@ -1,16 +1,18 @@
-SRC		= 
+SRC		= main.c get_next_line.c
 OBJS	= ${SRC:.c=.o}
 CC		= gcc
 CFLAGS	= -Wall -Wextra -Werror
+LIBMLX	= libmlx42.a
+LIBGLFW	= -lglfw -L"/Users/abitonti/.brew/opt/glfw/lib/"
 NAME	= cub3d
 
 .c.o	:
 	gcc ${CFLAGS} -c $< -o ${<:.c=.o}
 
-${NAME}	: ${OBJS}
-	gcc ${CFLAGS} main.c ${OBJS} -o ${NAME}
-
 all		: ${NAME}
+
+${NAME}	: ${OBJS}
+	gcc ${OBJS} ${LIBMLX} ${LIBGLFW} ${CFLAGS} -o ${NAME}
 
 clean	:
 	rm -rf ${OBJS}

@@ -3,120 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ale-roux <ale-roux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abitonti <abitonti@student.42mulhouse.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 21:19:57 by ale-roux          #+#    #+#             */
-/*   Updated: 2023/08/31 00:18:01 by ale-roux         ###   ########.fr       */
+/*   Updated: 2023/09/09 23:44:05 by abitonti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <fcntl.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <stdio.h>
 #include "cube.h"
-#include "get_next_line.h"
-
-//get_next_line
-
-static int	freeall(t_line **line)
-{
-	t_line	*next;
-
-	while (*line)
-	{
-		free((*line)->buff);
-		next = (*line)->next;
-		free(*line);
-		*line = next;
-	}
-	return (1);
-}
-
-static int	new_tline(t_line **line)
-{
-	*line = malloc(sizeof(t_line));
-	if (!(*line))
-		return (0);
-	(*line)->buff = malloc(100);
-	if (!((*line)->buff))
-	{
-		free(*line);
-		*line = 0;
-		return (0);
-	}
-	(*line)->next = 0;
-	(*line)->i = 0;
-	(*line)->start = 0;
-	(*line)->end = 0;
-	return (1);
-}
-
-static int	get_next_buff(int fd, int n, t_line *line)
-{
-	if (!(line->i))
-		line->end = read(fd, line->buff, 100);
-	if (line->end == -1 || (line->end == 0 && n == 0))
-		return (0);
-	while (line->i < line->end && (line->buff)[line->i] != '\n')
-		(line->i)++;
-	if (line->i == 100)
-	{
-		if (!new_tline(&(line->next)))
-			return (0);
-		return (get_next_buff(fd, n + line->i - line->start, line->next));
-	}
-	if ((line->buff)[line->i] == '\n')
-		(line->i)++;
-	return (n + line->i - line->start);
-}
-
-static void	fillsol(char *sol, int n, t_line **line)
-{
-	int		j;
-	t_line	*next;
-
-	while (*line)
-	{
-		j = (*line)->start - 1;
-		while (++j < (*line)->i)
-			sol[n++] = ((*line)->buff)[j];
-		if (j == (*line)->end)
-		{
-			free((*line)->buff);
-			next = (*line)->next;
-			free(*line);
-			*line = next;
-		}
-		else
-		{
-			(*line)->start = j;
-			break ;
-		}
-	}
-	sol[n] = 0;
-	return ;
-}
-
-char	*get_next_line(int fd)
-{
-	static t_line	*line[256];
-	int				size;
-	char			*sol;
-
-	if (fd < 0 || fd == 1 || fd == 2 || fd > 255)
-		return (0);
-	if (!line[fd] && !new_tline(&(line[fd])))
-		return (0);
-	size = get_next_buff(fd, 0, line[fd]);
-	if (!size && freeall(&(line[fd])))
-		return (0);
-	sol = malloc(size + 1);
-	if (!sol && freeall(&(line[fd])))
-		return (0);
-	fillsol(sol, 0, &(line[fd]));
-	return (sol);
-}
 
 //utils
 
@@ -427,8 +321,57 @@ void	print_help(char *exec)
 	printf("=============================\n");
 }
 
+int32_t ft_pixel(int32_t r, int32_t g, int32_t b, int32_t a)
+{
+    return (r << 24 | g << 16 | b << 8 | a);
+}
+
+void ft_randomize(void* param)
+{
+	uint32_t 	color;
+	mlx_image_t	*image;
+
+	image = ((t_cube *) param)->image;
+	for (uint32_t x = 0; x < image->width; ++x)
+	{
+		for (uint32_t y = 0; y < image->height; ++y)
+		{
+			/*color = ft_pixel(
+				rand() % 0xFF, // R
+				rand() % 0xFF, // G
+				rand() % 0xFF, // B
+				rand() % 0xFF  // A
+			);*/
+			if (y < image->height / 2)
+				color = 0xFFFFFFFF;
+			else
+				color = 0xFFFFFF00;
+			mlx_put_pixel(image, x, y, color);
+		}
+	}
+}
+
+void ft_hook(void* param)
+{
+	t_cube	*cube;
+
+	cube = (t_cube *) param;
+	if (mlx_is_key_down(cube->mlx, MLX_KEY_ESCAPE))
+		mlx_close_window(cube->mlx);
+	if (mlx_is_key_down(cube->mlx, MLX_KEY_UP))
+		cube->image->instances[0].y -= 5;
+	if (mlx_is_key_down(cube->mlx, MLX_KEY_DOWN))
+		cube->image->instances[0].y += 5;
+	if (mlx_is_key_down(cube->mlx, MLX_KEY_LEFT))
+		cube->image->instances[0].x -= 5;
+	if (mlx_is_key_down(cube->mlx, MLX_KEY_RIGHT))
+		cube->image->instances[0].x += 5;
+}
+
 int	main(int argc, char **argv)
 {
+	t_cube		cube;
+
 	if (argc == 2)
 		start(argv[1]);
 	else if (argc == 1)
@@ -441,5 +384,14 @@ int	main(int argc, char **argv)
 		printf("ARG ERROR\n");
 		return (1);
 	}
+	cube.mlx = mlx_init(800, 600, "cub3D", 1);
+	cube.image = mlx_new_image(cube.mlx, 800, 600);
+	mlx_image_to_window(cube.mlx, cube.image, 0, 0);
+	ft_randomize(&cube);
+	//mlx_loop_hook(mlx, ft_randomize, mlx);
+	//mlx_resize_hook(mlx, ft_resize, );
+	mlx_loop_hook(cube.mlx, ft_hook, &cube);
+	mlx_loop(cube.mlx);
+	mlx_terminate(cube.mlx);
 	return (0);
 }
