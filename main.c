@@ -6,7 +6,7 @@
 /*   By: abitonti <abitonti@student.42mulhouse.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 21:19:57 by ale-roux          #+#    #+#             */
-/*   Updated: 2023/09/09 23:44:05 by abitonti         ###   ########.fr       */
+/*   Updated: 2023/09/10 01:09:09 by abitonti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -368,6 +368,56 @@ void ft_hook(void* param)
 		cube->image->instances[0].x += 5;
 }
 
+void	mapinit(t_cube *cube)
+{
+	int	i;
+	int	j;
+
+	cube->mapheight = 15;
+	cube->mapwidth = 10;
+	cube->map = malloc(cube->mapheight * sizeof(char *));
+	i = -1;
+	while (++i < cube->mapheight)
+	{
+		j = -1;
+		cube->map[i] = malloc(cube->mapwidth * sizeof (char));
+		while (++j < cube->mapwidth)
+		{
+			if (i % (cube->mapheight - 1) && j % (cube->mapwidth - 1))
+				cube->map[i][j] = '0';
+			else
+				cube->map[i][j] = '1';
+		}
+	}
+}
+
+void	ft_displaymap(t_cube *cube)
+{
+	uint32_t	x;
+	uint32_t	y;
+	int	i;
+	int	j;
+
+	y = -1;
+	while (++y < cube->imap->height)
+	{
+		x = -1;
+		while (++x < cube->imap->width)
+		{
+			j = x * cube->mapwidth / (cube->imap->width + 1);
+			i = y * cube->mapheight / (cube->imap->height + 1);
+			if (!(x % (cube->imap->width - 1)) || !(x % (cube->imap->width / cube->mapwidth)))
+				mlx_put_pixel(cube->imap, x, y, 0x333333FF);
+			else if (!(y % (cube->imap->height - 1)) || !(y % (cube->imap->height / cube->mapheight)))
+				mlx_put_pixel(cube->imap, x, y, 0x333333FF);
+			else if (cube->map[i][j] == '1')
+				mlx_put_pixel(cube->imap, x, y, 0xFFFFFFFF);
+			else if (cube->map[i][j] == '0')
+				mlx_put_pixel(cube->imap, x, y, 0x000000FF);
+		}
+	}
+}
+
 int	main(int argc, char **argv)
 {
 	t_cube		cube;
@@ -384,12 +434,16 @@ int	main(int argc, char **argv)
 		printf("ARG ERROR\n");
 		return (1);
 	}
+	mapinit(&cube);
 	cube.mlx = mlx_init(800, 600, "cub3D", 1);
-	cube.image = mlx_new_image(cube.mlx, 800, 600);
+	cube.image = mlx_new_image(cube.mlx, cube.mlx->width, cube.mlx->height);
+	cube.imap = mlx_new_image(cube.mlx, cube.mlx->width / 4, cube.mlx->width * cube.mapheight / (cube.mapwidth * 4));
 	mlx_image_to_window(cube.mlx, cube.image, 0, 0);
+	mlx_image_to_window(cube.mlx, cube.imap, 0, 0);
 	ft_randomize(&cube);
 	//mlx_loop_hook(mlx, ft_randomize, mlx);
 	//mlx_resize_hook(mlx, ft_resize, );
+	ft_displaymap(&cube);
 	mlx_loop_hook(cube.mlx, ft_hook, &cube);
 	mlx_loop(cube.mlx);
 	mlx_terminate(cube.mlx);
