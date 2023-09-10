@@ -38,10 +38,24 @@ t_source	*struct_init(t_cube *cube)
 	return (source);
 }
 
+char    *tmpstr(t_cube cube)
+{
+    char    *map;
+
+    map = ft_calloc(1);
+    if (!map)
+	{
+		free(source);
+		free(cube);
+		return (NULL);
+	}
+    return (map);
+}
+
 void	start(char *arg)
 {
 	t_cube	*cube;
-	int		fd;
+	int	 	fd;
 	char	*line;
 
 	cube = (t_cube *)malloc(1 * sizeof(t_cube));
