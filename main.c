@@ -188,7 +188,7 @@ char	*cube_strjoin(char *s1, char *s2, int opt)
 char	*mapsplit(char *map, size_t lenght)
 {
 	char	*str;
-	int		i;
+	size_t	i;
 
 	i = 0;
 	str = malloc((lenght) * sizeof(char));
@@ -213,7 +213,7 @@ int	ft_charfind(char *str, char c)
 	int	i;
 
 	i = 0;
-	while (str[i] && str[i] != '\n')
+	while (str[i] && str[i] != c)
 		i++;
 	return (i);
 }
@@ -297,8 +297,8 @@ int	map_verif(char **map, size_t max_y)
 */
 void	map_formator(t_cube *cube, char *map)
 {
-	int	i;
-	int	j;
+	size_t	i;
+	size_t	j;
 
 	i = 0;
 	j = 0;
