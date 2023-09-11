@@ -24,7 +24,7 @@ typedef struct s_utils
 	int		i;
 	size_t	lenght;
 	size_t	height;
-	char	*map;
+	char	**map;
 }				t_utils;
 
 typedef struct s_source

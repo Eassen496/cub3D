@@ -41,6 +41,20 @@ void	*ft_calloc(size_t memory)
 	return (ptr);
 }
 
+char    *tmpstr(t_cube *cube)
+{
+    char    *map;
+
+    map = ft_calloc(1);
+    if (!map)
+	{
+		free(cube->source);
+		free(cube);
+		return (NULL);
+	}
+    return (map);
+}
+
 char	*ft_strdup(char *s1)
 {
 	int		i;
@@ -171,13 +185,73 @@ char	*cube_strjoin(char *s1, char *s2, int opt)
 	return (str);
 }
 
-//program
-/*
-void	map_calculator(t_cube *cube)
+char	*mapsplit(char *map, size_t lenght)
 {
-	//calculate the size of the map
+	char	*str;
+	int		i;
+
+	i = 0;
+	str = malloc((lenght) * sizeof(char));
+	if (!str)
+		return (NULL);
+	while (map[i] != '\n' && map[i] != '\0')
+	{
+		str[i] = map[i];
+		i++;
+	}
+	while (i < lenght)
+	{
+		str[i] = ' ';
+		i++;
+	}
+	str[i] = '\0';
+	return (str);
 }
-*/
+
+int	ft_charfind(char *str, char c)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] && str[i] != '\n')
+		i++;
+	return (i);
+}
+
+int	first_line(char *line)
+{
+	int	i;
+
+	i = 0;
+	while (line[i])
+	{
+		if (line[i] != ' ' && line[i] != '1')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+
+//program
+
+void	map_calculator(t_cube *cube, char *map)
+{
+	int		i;
+	size_t	lenght;
+
+	i = 0;
+	while (map[i])
+	{
+		lenght = 0;
+		while (map[i++] != '\n' && map[i])
+			lenght++;
+		if (cube->utils.lenght < lenght)
+			cube->utils.lenght = lenght;
+		cube->utils.height++;
+		i++;
+	}
+}
 
 t_source	*struct_init(t_cube *cube)
 {
@@ -192,13 +266,6 @@ t_source	*struct_init(t_cube *cube)
 	cube->utils.i = 0;
 	cube->utils.lenght = 0;
 	cube->utils.height = 0;
-	cube->utils.map = ft_calloc(1 * sizeof(char));
-	if (!cube->utils.map)
-	{
-		free(source);
-		free(cube);
-		return (NULL);
-	}
 	source->north = NULL;
 	source->south = NULL;
 	source->east = NULL;
@@ -207,6 +274,44 @@ t_source	*struct_init(t_cube *cube)
 	source->ceiling = NULL;
 	return (source);
 }
+/*
+int	map_verif(char **map, size_t max_y)
+{
+	int	x;
+	int	y;
+	int	max_x;
+	int	ret;
+
+	x = 0;
+	y = 1;
+	max_x = ft_strlen(map[1]);
+	ret = first_line(map[0]);	
+	while (x < max_x && y < max_y - 1)
+	{
+		if (map[y][x] == 0)
+		{
+			 
+		}
+	}
+}
+*/
+void	map_formator(t_cube *cube, char *map)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	cube->utils.map = (char **)malloc(cube->utils.height * sizeof(char *));
+	while (i < cube->utils.height)
+	{
+		cube->utils.map[i] = mapsplit(&map[j], cube->utils.lenght);
+		j = j + ft_charfind(&map[j], '\0') + 1;
+		i++;
+	}
+	free(map);
+	//cube->utils.i = map_verif(cube->utils.map[i], cube->utils.height);
+}
 
 void	source_fill2(char *line, t_cube *cube)
 {
@@ -214,13 +319,11 @@ void	source_fill2(char *line, t_cube *cube)
 	{
 		cube->source->floor = ft_strdup(ft_strchr(line, ' '));
 		cube->utils.i++;
-		printf("F to pay respect\n");
 	}
 	else if (ft_strncmp(line, "C ", 2) == 0 && cube->source->ceiling == NULL)
 	{
 		cube->source->ceiling = ft_strdup(ft_strchr(line, ' '));
 		cube->utils.i++;
-		printf("C\n");
 	}
 }
 
@@ -230,25 +333,21 @@ void	source_fill(char *line, t_cube *cube)
 	{
 		cube->source->north = ft_strdup(ft_strchr(line, '.'));
 		cube->utils.i++;
-		printf("NO\n");
 	}
 	else if (ft_strncmp(line, "SO ", 3) == 0 && cube->source->south == NULL)
 	{
 		cube->source->south = ft_strdup(ft_strchr(line, '.'));
 		cube->utils.i++;
-		printf("SO\n");
 	}
 	else if (ft_strncmp(line, "WE ", 3) == 0 && cube->source->west == NULL)
 	{
 		cube->source->west = ft_strdup(ft_strchr(line, '.'));
 		cube->utils.i++;
-		printf("WE\n");
 	}
 	else if (ft_strncmp(line, "EA ", 3) == 0 && cube->source->east == NULL)
 	{
 		cube->source->east = ft_strdup(ft_strchr(line, '.'));
 		cube->utils.i++;
-		printf("EA\n");
 	}
 	else
 		source_fill2(line, cube);
@@ -269,11 +368,13 @@ void	start(char *arg)
 	t_cube	*cube;
 	int		fd;
 	char	*line;
+	char	*map;
 
 	cube = (t_cube *)malloc(1 * sizeof(t_cube));
 	if (!cube)
 		return ;
 	cube->source = struct_init(cube);
+	map = tmpstr(cube);
 	if (!cube)
 		return ;
 	fd = ft_open(arg);
@@ -294,11 +395,11 @@ void	start(char *arg)
 	line = get_next_line(fd);
 	while (line)
 	{
-		cube->utils.map = cube_strjoin(cube->utils.map, line, 2);
+		map = cube_strjoin(map, line, 2);
 		line = get_next_line(fd);
 	}
-	//map_calculator(cube);
-	printf("%s", cube->utils.map);
+	map_calculator(cube, map);
+	map_formator(cube, map);
 }
 
 void	print_help(char *exec)
@@ -308,19 +409,20 @@ void	print_help(char *exec)
 	printf("|| Name of program: %s\t\t\t\t\t||\n", exec);
 	printf("|| launch program : ./%s <*.cub>\t\t\t\t||\n", exec);
 	printf("|| Control        :\t\t\t\t\t\t||\n");
-	printf("||\t  - [Esc]  : close the program\t\t\t\t||\n");
-	printf("||\t  - [W]  : move straight \t\t\t\t||\n");
-	printf("||\t  - [A]  : move left\t\t\t\t\t||\n");
-	printf("||\t  - [S]  : move back\t\t\t\t\t||\n");
-	printf("||\t  - [D]  : move right\t\t\t\t\t||\n");
-	printf("||\t  - [↑]  : move straight\t\t\t\t||\n");
-	printf("||\t  - [↓]  : move back\t\t\t\t\t||\n");
-	printf("||\t  - [→]  : move camera right\t\t\t\t||\n");
-	printf("||\t  - [←]  : move camera left\t\t\t\t||\n");
+	printf("||\t  - [Esc] : close the program\t\t\t\t||\n");
+	printf("||\t  - [W]   : move straight \t\t\t\t||\n");
+	printf("||\t  - [A]   : move left\t\t\t\t\t||\n");
+	printf("||\t  - [S]   : move back\t\t\t\t\t||\n");
+	printf("||\t  - [D]   : move right\t\t\t\t\t||\n");
+	printf("||\t  - [↑]   : move straight\t\t\t\t||\n");
+	printf("||\t  - [↓]   : move back\t\t\t\t\t||\n");
+	printf("||\t  - [→]   : move camera right\t\t\t\t||\n");
+	printf("||\t  - [←]   : move camera left\t\t\t\t||\n");
 	printf("=====================================");
 	printf("=============================\n");
 }
 
+/*
 int32_t ft_pixel(int32_t r, int32_t g, int32_t b, int32_t a)
 {
     return (r << 24 | g << 16 | b << 8 | a);
@@ -342,7 +444,7 @@ void ft_randomize(void* param)
 				rand() % 0xFF, // B
 				rand() % 0xFF  // A
 			);*/
-			if (y < image->height / 2)
+/*			if (y < image->height / 2)
 				color = 0xFFFFFFFF;
 			else
 				color = 0xFFFFFF00;
@@ -417,6 +519,7 @@ void	ft_displaymap(t_cube *cube)
 		}
 	}
 }
+*/
 
 int	main(int argc, char **argv)
 {
@@ -434,18 +537,18 @@ int	main(int argc, char **argv)
 		printf("ARG ERROR\n");
 		return (1);
 	}
-	mapinit(&cube);
-	cube.mlx = mlx_init(800, 600, "cub3D", 1);
-	cube.image = mlx_new_image(cube.mlx, cube.mlx->width, cube.mlx->height);
-	cube.imap = mlx_new_image(cube.mlx, cube.mlx->width / 4, cube.mlx->width * cube.mapheight / (cube.mapwidth * 4));
-	mlx_image_to_window(cube.mlx, cube.image, 0, 0);
-	mlx_image_to_window(cube.mlx, cube.imap, 0, 0);
-	ft_randomize(&cube);
-	//mlx_loop_hook(mlx, ft_randomize, mlx);
-	//mlx_resize_hook(mlx, ft_resize, );
-	ft_displaymap(&cube);
-	mlx_loop_hook(cube.mlx, ft_hook, &cube);
-	mlx_loop(cube.mlx);
-	mlx_terminate(cube.mlx);
+//	mapinit(&cube);
+//	cube.mlx = mlx_init(800, 600, "cub3D", 1);
+//	cube.image = mlx_new_image(cube.mlx, cube.mlx->width, cube.mlx->height);
+//	cube.imap = mlx_new_image(cube.mlx, cube.mlx->width / 4, cube.mlx->width * cube.mapheight / (cube.mapwidth * 4));
+//	mlx_image_to_window(cube.mlx, cube.image, 0, 0);
+//	mlx_image_to_window(cube.mlx, cube.imap, 0, 0);
+//	ft_randomize(&cube);
+//	//mlx_loop_hook(mlx, ft_randomize, mlx);
+//	//mlx_resize_hook(mlx, ft_resize, );
+//	ft_displaymap(&cube);
+//	mlx_loop_hook(cube.mlx, ft_hook, &cube);
+//	mlx_loop(cube.mlx);
+//	mlx_terminate(cube.mlx);
 	return (0);
 }
