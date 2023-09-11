@@ -6,7 +6,7 @@
 /*   By: abitonti <abitonti@student.42mulhouse.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 21:11:39 by ale-roux          #+#    #+#             */
-/*   Updated: 2023/09/10 00:12:11 by abitonti         ###   ########.fr       */
+/*   Updated: 2023/09/11 03:19:46 by abitonti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,13 @@ typedef struct s_cube
 	int			mapheight;
 	mlx_image_t	*imap;
 	char		**map;
+	int			xpos;
+	int			ypos;
+	int			angle;
 }				t_cube;
 
 char	*get_next_line(int fd);
+void 	ft_graphic(void);
+
 
 #endif

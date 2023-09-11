@@ -1,4 +1,4 @@
-SRC		= main.c get_next_line.c
+SRC		= main.c get_next_line.c graphic.c
 OBJS	= ${SRC:.c=.o}
 CC		= gcc
 CFLAGS	= -Wall -Wextra -Werror
