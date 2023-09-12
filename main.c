@@ -6,7 +6,7 @@
 /*   By: abitonti <abitonti@student.42mulhouse.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 21:19:57 by ale-roux          #+#    #+#             */
-/*   Updated: 2023/09/11 03:23:59 by abitonti         ###   ########.fr       */
+/*   Updated: 2023/09/12 01:15:50 by abitonti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -424,7 +424,9 @@ void	print_help(char *exec)
 
 int	main(int argc, char **argv)
 {
-	if (argc == 2)
+	(void) argc;
+	(void) argv;
+	/*if (argc == 2)
 		start(argv[1]);
 	else if (argc == 1)
 	{
@@ -435,6 +437,7 @@ int	main(int argc, char **argv)
 	{
 		printf("ARG ERROR\n");
 		return (1);
-	}
+	}*/
+	ft_graphic();
 	return (0);
 }

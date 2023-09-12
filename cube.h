@@ -6,7 +6,7 @@
 /*   By: abitonti <abitonti@student.42mulhouse.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 21:11:39 by ale-roux          #+#    #+#             */
-/*   Updated: 2023/09/11 03:19:46 by abitonti         ###   ########.fr       */
+/*   Updated: 2023/09/12 01:40:47 by abitonti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdio.h>
+# include <math.h>
 # include "MLX42.h"
 
 typedef struct s_utils
@@ -49,6 +50,7 @@ typedef struct s_cube
 	char		**map;
 	int			xpos;
 	int			ypos;
+	id_t		orientation;
 	int			angle;
 }				t_cube;
 

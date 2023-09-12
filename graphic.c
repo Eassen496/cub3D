@@ -6,7 +6,7 @@
 /*   By: abitonti <abitonti@student.42mulhouse.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 03:17:43 by abitonti          #+#    #+#             */
-/*   Updated: 2023/09/11 03:19:51 by abitonti         ###   ########.fr       */
+/*   Updated: 2023/09/12 02:26:20 by abitonti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,30 @@ void ft_hook(void* param)
 	cube = (t_cube *) param;
 	if (mlx_is_key_down(cube->mlx, MLX_KEY_ESCAPE))
 		mlx_close_window(cube->mlx);
-	if (mlx_is_key_down(cube->mlx, MLX_KEY_UP) && cube->map[cube->xpos/100][(cube->ypos-20)/100] != '1')
-		cube->ypos -= 5;
-	if (mlx_is_key_down(cube->mlx, MLX_KEY_DOWN) && cube->map[cube->xpos/100][(cube->ypos+20)/100] != '1')
-		cube->ypos += 5;
-	if (mlx_is_key_down(cube->mlx, MLX_KEY_LEFT) && cube->map[(cube->xpos-20)/100][cube->ypos/100] != '1')
-		cube->xpos -= 5;
-	if (mlx_is_key_down(cube->mlx, MLX_KEY_RIGHT) && cube->map[(cube->xpos+20)/100][cube->ypos/100] != '1')
-		cube->xpos += 5;
+	if (mlx_is_key_down(cube->mlx, MLX_KEY_W) && cube->map[cube->xpos/100][(cube->ypos-20)/100] != '1')
+	{
+		cube->ypos -= 5 * round(sin(cube->orientation * M_PI / 180));
+		cube->xpos += 5 * round(cos(cube->orientation * M_PI / 180));
+	}
+	if (mlx_is_key_down(cube->mlx, MLX_KEY_S) && cube->map[cube->xpos/100][(cube->ypos+20)/100] != '1')
+	{
+		cube->ypos += 5 * round(sin(cube->orientation * M_PI / 180));
+		cube->xpos -= 5 * round(cos(cube->orientation * M_PI / 180));
+	}
+	if (mlx_is_key_down(cube->mlx, MLX_KEY_A) && cube->map[(cube->xpos-20)/100][cube->ypos/100] != '1')
+	{
+		cube->ypos -= 5 * round(cos(cube->orientation * M_PI / 180));
+		cube->xpos -= 5 * round(sin(cube->orientation * M_PI / 180));
+	}
+	if (mlx_is_key_down(cube->mlx, MLX_KEY_D) && cube->map[(cube->xpos+20)/100][cube->ypos/100] != '1')
+	{
+		cube->ypos += 5 * round(cos(cube->orientation * M_PI / 180));
+		cube->xpos += 5 * round(sin(cube->orientation * M_PI / 180));
+	}
+	if (mlx_is_key_down(cube->mlx, MLX_KEY_LEFT))
+		cube->orientation = (cube->orientation + 5) % 360;
+	if (mlx_is_key_down(cube->mlx, MLX_KEY_RIGHT))
+		cube->orientation = (cube->orientation + 355) % 360;
 }
 
 void	mapinit(t_cube *cube)
@@ -65,11 +81,12 @@ void	mapinit(t_cube *cube)
 	int	i;
 	int	j;
 
-	cube->mapheight = 15;
-	cube->mapwidth = 10;
-	cube->xpos = 500;
-	cube->ypos = 750;
-	cube->map = malloc(cube->mapheight * sizeof(char *));
+	cube->orientation = 90;
+	cube->mapheight = 10;
+	cube->mapwidth = 15;
+	cube->xpos = 150;
+	cube->ypos = 150;
+	cube->map = malloc(cube->mapwidth * sizeof(char *));
 	i = -1;
 	while (++i < cube->mapwidth)
 	{
@@ -85,23 +102,51 @@ void	mapinit(t_cube *cube)
 	}
 }
 
-void	ft_displayme(t_cube *cube, int size)
+static void	drawline(mlx_image_t *image, int *a, int *b)
 {
+	int	max;
 	int	x;
 	int	y;
 	int	i;
+
+	max = 0;
+	if (a[0] - b[0] > max)
+		max = a[0] - b[0];
+	if (a[1] - b[1] > max)
+		max = a[1] - b[1];
+	if (b[0] - a[0] > max)
+		max = b[0] - a[0];
+	if (b[1] - a[1] > max)
+		max = b[1] - a[1];
+	i = -1;
+	while (++i <= max)
+	{
+		x = round((a[0] * i + b[0] * (max - i)) / max);
+		y = round((a[1] * i + b[1] * (max - i)) / max);
+		mlx_put_pixel(image, x, y, 0xFF0000FF);
+	}
+}
+
+void	ft_displayme(t_cube *cube, int size)
+{
+	int	a[2];
+	int	b[2];
+	int	i;
 	int	j;
 
-	x = cube->xpos * cube->imap->width / (100 * cube->mapwidth);
-	y = cube->ypos * cube->imap->height / (100 * cube->mapheight);
+	a[0] = cube->xpos * cube->imap->width / (100 * cube->mapwidth);
+	a[1] = cube->ypos * cube->imap->height / (100 * cube->mapheight);
 	i = - size;
 	while(i <= size)
 	{
 		j = - size;
 		while(j <= size)
-			mlx_put_pixel(cube->imap, x + i, y + j++, 0xFF0000FF);
+			mlx_put_pixel(cube->imap, a[0] + i, a[1] + j++, 0xFF0000FF);
 		i++;
 	}
+	b[0] = a[0] + round(3 * size * cos(cube->orientation * M_PI / 180));
+	b[1] = a[1] - round(3 * size * sin(cube->orientation * M_PI / 180));
+	drawline(cube->imap, a, b);
 }
 
 void	ft_displaymap(void *param)
@@ -121,9 +166,9 @@ void	ft_displaymap(void *param)
 		{
 			i = x * cube->mapwidth / cube->imap->width;
 			j = y * cube->mapheight / cube->imap->height;
-			if (!(x % (cube->imap->width - 1)) || !(x % (cube->imap->width / cube->mapwidth)))
+			if (!(x % (cube->imap->width - 1)) || !(x % ((cube->imap->width) / cube->mapwidth)))
 				mlx_put_pixel(cube->imap, x, y, 0x333333FF);
-			else if (!(y % (cube->imap->height - 1)) || !(y % (cube->imap->height / cube->mapheight)))
+			else if (!(y % (cube->imap->height - 1)) || !(y % ((cube->imap->height) / cube->mapheight)))
 				mlx_put_pixel(cube->imap, x, y, 0x333333FF);
 			else if (cube->map[i][j] == '1')
 				mlx_put_pixel(cube->imap, x, y, 0xFFFFFFFF);
@@ -139,7 +184,7 @@ void ft_graphic(void)
 	t_cube		cube;
 
 	mapinit(&cube);
-	cube.mlx = mlx_init(800, 600, "cub3D", 1);
+	cube.mlx = mlx_init(1200, 900, "cub3D", 1);
 	cube.image = mlx_new_image(cube.mlx, cube.mlx->width, cube.mlx->height);
 	cube.imap = mlx_new_image(cube.mlx, cube.mlx->width / 4, cube.mlx->width * cube.mapheight / (cube.mapwidth * 4));
 	mlx_image_to_window(cube.mlx, cube.image, 0, 0);
