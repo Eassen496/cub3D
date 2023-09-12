@@ -218,6 +218,12 @@ int	ft_charfind(char *str, char c)
 	return (i);
 }
 
+void	*null_free(t_cube *cube)
+{
+	free(cube);
+	return (NULL);
+}
+
 //program
 
 void	map_calculator(t_cube *cube, char *map)
@@ -239,7 +245,7 @@ void	map_calculator(t_cube *cube, char *map)
 	cube->utils.height--;
 }
 
-void ft_freeall(t_cube *cube, char *str)
+int ft_freeall(t_cube *cube, char *str)
 {
 	size_t	i;
 
@@ -257,6 +263,7 @@ void ft_freeall(t_cube *cube, char *str)
 	free(cube->source->ceiling);
 	free(cube->source);
 	free(cube);
+	return (1);
 }
 
 t_source	*struct_init(t_cube *cube)
@@ -287,12 +294,6 @@ int	map_verif(char **map, size_t max_y, size_t max_x)
 	size_t	y;
 
 	y = 0;
-//	printf("%s", map[0]);
-//	(void) x;
-//	(void) y;
-//	(void) max_x;
-//	(void) max_y;
-//	(void) map;
 	while (y < max_y)
 	{
 		x = 0;
@@ -318,7 +319,7 @@ int	map_verif(char **map, size_t max_y, size_t max_x)
 	return (0);
 }
 
-void	map_formator(t_cube *cube, char *map)
+int	map_formator(t_cube *cube, char *map)
 {
 	size_t	i;
 	size_t	j;
@@ -334,7 +335,8 @@ void	map_formator(t_cube *cube, char *map)
 	}
 	free(map);
 	if (map_verif(cube->utils.map, cube->utils.height, cube->utils.lenght) == 1)
-		ft_freeall(cube, NULL);
+		return (ft_freeall(cube, NULL));
+	return (0);
 }
 
 void	source_fill2(char *line, t_cube *cube)
@@ -387,7 +389,7 @@ int	ft_open(char *arg)
 	return (fd);
 }
 
-void	start(char *arg)
+t_cube	*start(char *arg)
 {
 	t_cube	*cube;
 	int		fd;
@@ -396,18 +398,18 @@ void	start(char *arg)
 
 	cube = (t_cube *)malloc(1 * sizeof(t_cube));
 	if (!cube)
-		return ;
+		return (NULL);
 	cube->source = struct_init(cube);
 	map = tmpstr(cube);
-	if (!cube)
-		return ;
+	if (!cube->source)
+		return (null_free(cube));
 	fd = ft_open(arg);
 	if (fd < 0)
 	{
 		free(cube->source);
 		free(cube);
 		printf("Please give a valid file :D\n");
-		return ;
+		return (NULL);
 	}
 	while (cube->utils.i < 6)
 	{
@@ -423,7 +425,9 @@ void	start(char *arg)
 		line = get_next_line(fd);
 	}
 	map_calculator(cube, map);
-	map_formator(cube, map);
+	if (map_formator(cube, map) == 1)
+		return (NULL);
+	return (cube);
 }
 
 void	print_help(char *exec)
@@ -462,7 +466,8 @@ int	main(int argc, char **argv)
 		printf("ARG ERROR\n");
 		return (1);
 	}
-	ft_graphic(cube);
+	if (cube != NULL)
+		ft_graphic(cube);
 	system("leaks a.out");
 	return (0);
 }
