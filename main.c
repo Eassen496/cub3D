@@ -6,7 +6,7 @@
 /*   By: abitonti <abitonti@student.42mulhouse.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 21:19:57 by ale-roux          #+#    #+#             */
-/*   Updated: 2023/09/12 01:15:50 by abitonti         ###   ########.fr       */
+/*   Updated: 2023/09/12 23:45:14 by abitonti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,7 +191,7 @@ char	*mapsplit(char *map, size_t lenght)
 	size_t	i;
 
 	i = 0;
-	str = malloc((lenght) * sizeof(char));
+	str = malloc((lenght + 1) * sizeof(char));
 	if (!str)
 		return (NULL);
 	while (map[i] != '\n' && map[i] != '\0')
@@ -218,21 +218,6 @@ int	ft_charfind(char *str, char c)
 	return (i);
 }
 
-int	first_line(char *line)
-{
-	int	i;
-
-	i = 0;
-	while (line[i])
-	{
-		if (line[i] != ' ' && line[i] != '1')
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
-
 //program
 
 void	map_calculator(t_cube *cube, char *map)
@@ -251,6 +236,27 @@ void	map_calculator(t_cube *cube, char *map)
 		cube->utils.height++;
 		i++;
 	}
+	cube->utils.height--;
+}
+
+void ft_freeall(t_cube *cube, char *str)
+{
+	size_t	i;
+
+	i = 0;
+	if (str != NULL)
+		free(str);
+	while (i < cube->utils.height)
+		free(cube->utils.map[i++]);
+	free(cube->utils.map);
+	free(cube->source->north);
+	free(cube->source->south);
+	free(cube->source->west);
+	free(cube->source->east);
+	free(cube->source->floor);
+	free(cube->source->ceiling);
+	free(cube->source);
+	free(cube);
 }
 
 t_source	*struct_init(t_cube *cube)
@@ -274,27 +280,44 @@ t_source	*struct_init(t_cube *cube)
 	source->ceiling = NULL;
 	return (source);
 }
-/*
-int	map_verif(char **map, size_t max_y)
-{
-	int	x;
-	int	y;
-	int	max_x;
-	int	ret;
 
-	x = 0;
-	y = 1;
-	max_x = ft_strlen(map[1]);
-	ret = first_line(map[0]);	
-	while (x < max_x && y < max_y - 1)
+int	map_verif(char **map, size_t max_y, size_t max_x)
+{
+	size_t	x;
+	size_t	y;
+
+	y = 0;
+//	printf("%s", map[0]);
+//	(void) x;
+//	(void) y;
+//	(void) max_x;
+//	(void) max_y;
+//	(void) map;
+	while (y < max_y)
 	{
-		if (map[y][x] == 0)
+		x = 0;
+		while (x < max_x)
 		{
-			 
+			if (map[y][x] == '0')
+			{
+				if (x == 0 || x == max_x - 1 || y == 0 || y == max_y - 1)
+					return (1);
+				if (map[y][x + 1] == ' ')
+					return (1);
+				if (map[y][x - 1] == ' ')
+					return (1);
+				if (map[y + 1][x] == ' ')
+					return (1);
+				if (map[y - 1][x] == ' ')
+					return (1);
+			}
+			x++;
 		}
+		y++;
 	}
+	return (0);
 }
-*/
+
 void	map_formator(t_cube *cube, char *map)
 {
 	size_t	i;
@@ -306,11 +329,12 @@ void	map_formator(t_cube *cube, char *map)
 	while (i < cube->utils.height)
 	{
 		cube->utils.map[i] = mapsplit(&map[j], cube->utils.lenght);
-		j = j + ft_charfind(&map[j], '\0') + 1;
+		j = j + ft_charfind(&map[j], '\n') + 1;
 		i++;
 	}
 	free(map);
-	//cube->utils.i = map_verif(cube->utils.map[i], cube->utils.height);
+	if (map_verif(cube->utils.map, cube->utils.height, cube->utils.lenght) == 1)
+		ft_freeall(cube, NULL);
 }
 
 void	source_fill2(char *line, t_cube *cube)
@@ -437,7 +461,9 @@ int	main(int argc, char **argv)
 	{
 		printf("ARG ERROR\n");
 		return (1);
+<<<<<<< HEAD
 	}*/
 	ft_graphic();
+	system("leaks a.out");
 	return (0);
 }
