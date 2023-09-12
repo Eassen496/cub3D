@@ -448,10 +448,10 @@ void	print_help(char *exec)
 
 int	main(int argc, char **argv)
 {
-	(void) argc;
-	(void) argv;
-	/*if (argc == 2)
-		start(argv[1]);
+	t_cube	*cube;
+
+	if (argc == 2)
+		cube = start(argv[1]);
 	else if (argc == 1)
 	{
 		print_help(&argv[0][2]);
@@ -461,9 +461,8 @@ int	main(int argc, char **argv)
 	{
 		printf("ARG ERROR\n");
 		return (1);
-<<<<<<< HEAD
-	}*/
-	ft_graphic();
+	}
+	ft_graphic(cube);
 	system("leaks a.out");
 	return (0);
 }
