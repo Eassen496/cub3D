@@ -6,11 +6,11 @@
 /*   By: abitonti <abitonti@student.42mulhouse.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 03:17:43 by abitonti          #+#    #+#             */
-/*   Updated: 2023/09/12 02:26:20 by abitonti         ###   ########.fr       */
+/*   Updated: 2023/09/12 23:50:43 by abitonti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cube.h"
+#include "cube->h"
 
 
 int32_t ft_pixel(int32_t r, int32_t g, int32_t b, int32_t a)
@@ -179,22 +179,20 @@ void	ft_displaymap(void *param)
 	ft_displayme(cube, cube->imap->width / (10 * cube->mapwidth));
 }
 
-void ft_graphic(void)
+void ft_graphic(t_cube *cube)
 {
-	t_cube		cube;
-
-	mapinit(&cube);
-	cube.mlx = mlx_init(1200, 900, "cub3D", 1);
-	cube.image = mlx_new_image(cube.mlx, cube.mlx->width, cube.mlx->height);
-	cube.imap = mlx_new_image(cube.mlx, cube.mlx->width / 4, cube.mlx->width * cube.mapheight / (cube.mapwidth * 4));
-	mlx_image_to_window(cube.mlx, cube.image, 0, 0);
-	mlx_image_to_window(cube.mlx, cube.imap, 0, 0);
+	mapinit(cube);
+	cube->mlx = mlx_init(1200, 900, "cub3D", 1);
+	cube->image = mlx_new_image(cube->mlx, cube->mlx->width, cube->mlx->height);
+	cube->imap = mlx_new_image(cube->mlx, cube->mlx->width / 4, cube->mlx->width * cube->mapheight / (cube->mapwidth * 4));
+	mlx_image_to_window(cube->mlx, cube->image, 0, 0);
+	mlx_image_to_window(cube->mlx, cube->imap, 0, 0);
 	ft_randomize(&cube);
 	//mlx_loop_hook(mlx, ft_randomize, mlx);
 	//mlx_resize_hook(mlx, ft_resize, );
 	//ft_displaymap(&cube);
-	mlx_loop_hook(cube.mlx, ft_displaymap, &cube);
-	mlx_loop_hook(cube.mlx, ft_hook, &cube);
-	mlx_loop(cube.mlx);
-	mlx_terminate(cube.mlx);
+	mlx_loop_hook(cube->mlx, ft_displaymap, &cube);
+	mlx_loop_hook(cube->mlx, ft_hook, &cube);
+	mlx_loop(cube->mlx);
+	mlx_terminate(cube->mlx);
 }

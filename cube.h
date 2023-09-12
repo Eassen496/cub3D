@@ -6,7 +6,7 @@
 /*   By: abitonti <abitonti@student.42mulhouse.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 21:11:39 by ale-roux          #+#    #+#             */
-/*   Updated: 2023/09/12 01:40:47 by abitonti         ###   ########.fr       */
+/*   Updated: 2023/09/12 23:50:46 by abitonti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ typedef struct s_cube
 }				t_cube;
 
 char	*get_next_line(int fd);
-void 	ft_graphic(void);
+void	ft_graphic(t_cube *cube);
 
 
 #endif
