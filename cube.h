@@ -6,7 +6,7 @@
 /*   By: abitonti <abitonti@student.42mulhouse.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 21:11:39 by ale-roux          #+#    #+#             */
-/*   Updated: 2023/09/13 00:12:25 by abitonti         ###   ########.fr       */
+/*   Updated: 2023/09/13 03:49:38 by abitonti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@
 typedef struct s_utils
 {
 	int		i;
-	size_t	lenght;
-	size_t	height;
+	int		lenght;
+	int		height;
 	char	**map;
 }				t_utils;
 

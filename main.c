@@ -6,7 +6,7 @@
 /*   By: abitonti <abitonti@student.42mulhouse.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 21:19:57 by ale-roux          #+#    #+#             */
-/*   Updated: 2023/09/13 01:14:26 by abitonti         ###   ########.fr       */
+/*   Updated: 2023/09/13 08:01:16 by abitonti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,10 @@ int	ft_strlen(char *str)
 	return (i);
 }
 
-void	*ft_calloc(size_t memory)
+void	*ft_calloc(int memory)
 {
-	char			*ptr;
-	unsigned int	i;
+	char	*ptr;
+	int		i;
 
 	i = 0;
 	ptr = malloc(memory);
@@ -117,7 +117,7 @@ int	ft_strcmp(char *s1, char *s2)
 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }
 
-int	ft_strncmp(char *s1, char *s2, size_t n)
+int	ft_strncmp(char *s1, char *s2, int n)
 {
 	unsigned int	i;
 
@@ -185,10 +185,10 @@ char	*cube_strjoin(char *s1, char *s2, int opt)
 	return (str);
 }
 
-char	*mapsplit(char *map, size_t lenght)
+char	*mapsplit(char *map, int lenght)
 {
 	char	*str;
-	size_t	i;
+	int		i;
 
 	i = 0;
 	str = malloc((lenght + 1) * sizeof(char));
@@ -228,8 +228,8 @@ void	*null_free(t_cube *cube)
 
 void	map_calculator(t_cube *cube, char *map)
 {
-	int		i;
-	size_t	lenght;
+	int	i;
+	int	lenght;
 
 	i = 0;
 	while (map[i])
@@ -247,7 +247,7 @@ void	map_calculator(t_cube *cube, char *map)
 
 int ft_freeall(t_cube *cube, char *str)
 {
-	size_t	i;
+	int	i;
 
 	i = 0;
 	if (str != NULL)
@@ -291,18 +291,20 @@ t_source	*struct_init(t_cube *cube)
 	return (source);
 }
 
-int	startposition(t_cube *cube, char c, int x, int y)
+int	startpos(t_cube *cube, int x, int y)
 {
 	if (cube->angle != -1)
 		return (1);
-	if (c == 'N')
-		cube->angle = 90;
-	else if (c == 'S')
+	if (cube->utils.map[y][x] == 'N')
+		cube->angle = 30;
+	else if (cube->utils.map[y][x] == 'S')
 		cube->angle = 270;
-	else if (c == 'E')
+	else if (cube->utils.map[y][x] == 'E')
 		cube->angle = 0;
-	else if (c == 'W')
+	else if (cube->utils.map[y][x] == 'W')
 		cube->angle = 180;
+	else
+		return (1);
 	cube->xpos = x * 100 + 50;
 	cube->ypos = y * 100 + 50;
 	cube->utils.map[y][x] = '0';
@@ -310,10 +312,10 @@ int	startposition(t_cube *cube, char c, int x, int y)
 	return (0);
 }
 
-int	map_verif(char **map, size_t max_y, size_t max_x, t_cube *cube)
+int	map_verif(char **map, int max_y, int max_x, t_cube *cube)
 {
-	size_t	x;
-	size_t	y;
+	int	x;
+	int	y;
 
 	y = 0;
 	while (y < max_y)
@@ -321,32 +323,30 @@ int	map_verif(char **map, size_t max_y, size_t max_x, t_cube *cube)
 		x = 0;
 		while (x < max_x)
 		{
-			if (map[y][x] == '0' || map[y][x] == 'N' || map[y][x] == 'S' || map[y][x] == 'E' || map[y][x] == 'W')
+			if (map[y][x] >= 'A' && map[y][x] <= 'Z' && startpos(cube, x, y))
+				return (1);
+			if (map[y][x] == '0')
 			{
-				if (map[y][x] != '0' && startposition(cube, map[y][x], x, y))
-					return (1);
 				if (x == 0 || x == max_x - 1 || y == 0 || y == max_y - 1)
 					return (1);
-				if (map[y][x + 1] == ' ')
+				if (map[y][x + 1] == ' ' || map[y][x - 1] == ' ')
 					return (1);
-				if (map[y][x - 1] == ' ')
-					return (1);
-				if (map[y + 1][x] == ' ')
-					return (1);
-				if (map[y - 1][x] == ' ')
+				if (map[y + 1][x] == ' ' || map[y - 1][x] == ' ')
 					return (1);
 			}
 			x++;
 		}
 		y++;
 	}
+	if (cube->angle == -1)
+		return (1);
 	return (0);
 }
 
 int	map_formator(t_cube *cube, char *map)
 {
-	size_t	i;
-	size_t	j;
+	int	i;
+	int	j;
 
 	i = 0;
 	j = 0;
