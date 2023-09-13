@@ -6,7 +6,7 @@
 /*   By: abitonti <abitonti@student.42mulhouse.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 21:19:57 by ale-roux          #+#    #+#             */
-/*   Updated: 2023/09/13 08:01:16 by abitonti         ###   ########.fr       */
+/*   Updated: 2023/09/13 08:30:13 by abitonti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -235,14 +235,14 @@ void	map_calculator(t_cube *cube, char *map)
 	while (map[i])
 	{
 		lenght = 0;
-		while (map[i++] != '\n' && map[i])
+		while (map[i] && map[i++] != '\n')
 			lenght++;
 		if (cube->utils.lenght < lenght)
 			cube->utils.lenght = lenght;
 		cube->utils.height++;
-		i++;
+		//i++;
 	}
-	cube->utils.height--;
+	//cube->utils.height--;
 }
 
 int ft_freeall(t_cube *cube, char *str)
