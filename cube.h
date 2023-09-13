@@ -6,7 +6,7 @@
 /*   By: abitonti <abitonti@student.42mulhouse.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 21:11:39 by ale-roux          #+#    #+#             */
-/*   Updated: 2023/09/12 23:50:46 by abitonti         ###   ########.fr       */
+/*   Updated: 2023/09/13 00:12:25 by abitonti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ typedef struct s_cube
 	char		**map;
 	int			xpos;
 	int			ypos;
-	id_t		orientation;
 	int			angle;
 }				t_cube;
 

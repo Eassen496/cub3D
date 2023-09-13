@@ -6,7 +6,7 @@
 /*   By: abitonti <abitonti@student.42mulhouse.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 21:19:57 by ale-roux          #+#    #+#             */
-/*   Updated: 2023/09/12 23:50:44 by abitonti         ###   ########.fr       */
+/*   Updated: 2023/09/13 01:14:26 by abitonti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -276,6 +276,9 @@ t_source	*struct_init(t_cube *cube)
 		free(cube);
 		return (NULL);
 	}
+	cube->angle = -1;
+	cube->xpos = -1;
+	cube->ypos = -1;
 	cube->utils.i = 0;
 	cube->utils.lenght = 0;
 	cube->utils.height = 0;
@@ -288,7 +291,26 @@ t_source	*struct_init(t_cube *cube)
 	return (source);
 }
 
-int	map_verif(char **map, size_t max_y, size_t max_x)
+int	startposition(t_cube *cube, char c, int x, int y)
+{
+	if (cube->angle != -1)
+		return (1);
+	if (c == 'N')
+		cube->angle = 90;
+	else if (c == 'S')
+		cube->angle = 270;
+	else if (c == 'E')
+		cube->angle = 0;
+	else if (c == 'W')
+		cube->angle = 180;
+	cube->xpos = x * 100 + 50;
+	cube->ypos = y * 100 + 50;
+	cube->utils.map[y][x] = '0';
+	printf("depart : %d %d\n", x, y);
+	return (0);
+}
+
+int	map_verif(char **map, size_t max_y, size_t max_x, t_cube *cube)
 {
 	size_t	x;
 	size_t	y;
@@ -299,8 +321,10 @@ int	map_verif(char **map, size_t max_y, size_t max_x)
 		x = 0;
 		while (x < max_x)
 		{
-			if (map[y][x] == '0')
+			if (map[y][x] == '0' || map[y][x] == 'N' || map[y][x] == 'S' || map[y][x] == 'E' || map[y][x] == 'W')
 			{
+				if (map[y][x] != '0' && startposition(cube, map[y][x], x, y))
+					return (1);
 				if (x == 0 || x == max_x - 1 || y == 0 || y == max_y - 1)
 					return (1);
 				if (map[y][x + 1] == ' ')
@@ -334,7 +358,7 @@ int	map_formator(t_cube *cube, char *map)
 		i++;
 	}
 	free(map);
-	if (map_verif(cube->utils.map, cube->utils.height, cube->utils.lenght) == 1)
+	if (map_verif(cube->utils.map, cube->utils.height, cube->utils.lenght, cube) == 1)
 		return (ft_freeall(cube, NULL));
 	return (0);
 }
@@ -466,8 +490,7 @@ int	main(int argc, char **argv)
 		printf("ARG ERROR\n");
 		return (1);
 	}
-	if (cube != NULL)
+	if (cube != NULL && printf("plop\n"))
 		ft_graphic(cube);
-	system("leaks a.out");
 	return (0);
 }
