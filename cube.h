@@ -34,8 +34,8 @@ typedef struct s_source
 	char	*south;
 	char	*east;
 	char	*west;
-	char	*floor;
-	char	*ceiling;
+	int		*floor;
+	int		*ceiling;
 }				t_source;
 
 typedef struct s_cube
@@ -55,6 +55,5 @@ typedef struct s_cube
 
 char	*get_next_line(int fd);
 void	ft_graphic(t_cube *cube);
-
 
 #endif
