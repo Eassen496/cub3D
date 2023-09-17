@@ -343,6 +343,35 @@ int	map_verif(char **map, int max_y, int max_x, t_cube *cube)
 	return (0);
 }
 
+int	*ft_source_filling(char *line)
+{
+	int	*ret;
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	ret = (int *)malloc(3 * sizeof(int));
+	if (!ret)
+		return (NULL);
+	ret[0] = 0;
+	ret[1] = 0;
+	ret[2] = 0;
+	while (line[i] > '9' || line[i] < '0')
+		i++;
+	while (line[i] <= '9' && line[i] >= '0')
+		ret[j] = (ret[j] * 10) + line[i++] - 48;
+	i++;
+	j++;
+	while (line[i] <= '9' && line[i] >= '0')
+		ret[j] = (ret[j] * 10) + line[i++] - 48;
+	j++;
+	i++;
+	while (line[i] <= '9' && line[i] >= '0')
+		ret[j] = (ret[j] * 10) + line[i++] - 48;
+	return (ret);
+}
+
 int	map_formator(t_cube *cube, char *map)
 {
 	int	i;
@@ -367,13 +396,15 @@ void	source_fill2(char *line, t_cube *cube)
 {
 	if (ft_strncmp(line, "F ", 2) == 0 && cube->source->floor == NULL)
 	{
-		cube->source->floor = ft_strdup(ft_strchr(line, ' '));
+		cube->source->floor = ft_source_filling(line);
 		cube->utils.i++;
+		printf("F: %d, %d, %d\n", cube->source->floor[0], cube->source->floor[1], cube->source->floor[2]);
 	}
 	else if (ft_strncmp(line, "C ", 2) == 0 && cube->source->ceiling == NULL)
 	{
-		cube->source->ceiling = ft_strdup(ft_strchr(line, ' '));
+		cube->source->ceiling = ft_source_filling(line);
 		cube->utils.i++;
+		printf("C: %d, %d, %d\n", cube->source->ceiling[0], cube->source->ceiling[1], cube->source->ceiling[2]);
 	}
 }
 
