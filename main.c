@@ -41,18 +41,18 @@ void	*ft_calloc(int memory)
 	return (ptr);
 }
 
-char    *tmpstr(t_cube *cube)
+char	*tmpstr(t_cube *cube)
 {
-    char    *map;
+	char	*map;
 
-    map = ft_calloc(1);
-    if (!map)
+	map = ft_calloc(1);
+	if (!map)
 	{
 		free(cube->source);
 		free(cube);
 		return (NULL);
 	}
-    return (map);
+	return (map);
 }
 
 char	*ft_strdup(char *s1)
@@ -240,9 +240,7 @@ void	map_calculator(t_cube *cube, char *map)
 		if (cube->utils.lenght < lenght)
 			cube->utils.lenght = lenght;
 		cube->utils.height++;
-		//i++;
 	}
-	//cube->utils.height--;
 }
 
 int ft_freeall(t_cube *cube, char *str)
@@ -268,7 +266,7 @@ int ft_freeall(t_cube *cube, char *str)
 
 t_source	*struct_init(t_cube *cube)
 {
-	t_source *source;
+	t_source	*source;
 
 	source = (t_source *)malloc(1 * sizeof(t_source));
 	if (!source)
@@ -311,6 +309,8 @@ int	startpos(t_cube *cube, int x, int y)
 	printf("depart : %d %d\n", x, y);
 	return (0);
 }
+
+//function too long
 
 int	map_verif(char **map, int max_y, int max_x, t_cube *cube)
 {
@@ -387,7 +387,8 @@ int	map_formator(t_cube *cube, char *map)
 		i++;
 	}
 	free(map);
-	if (map_verif(cube->utils.map, cube->utils.height, cube->utils.lenght, cube) == 1)
+	if (map_verif(cube->utils.map, cube->utils.height,
+			cube->utils.lenght, cube) == 1)
 		return (ft_freeall(cube, NULL));
 	return (0);
 }
@@ -398,13 +399,11 @@ void	source_fill2(char *line, t_cube *cube)
 	{
 		cube->source->floor = ft_source_filling(line);
 		cube->utils.i++;
-		printf("F: %d, %d, %d\n", cube->source->floor[0], cube->source->floor[1], cube->source->floor[2]);
 	}
 	else if (ft_strncmp(line, "C ", 2) == 0 && cube->source->ceiling == NULL)
 	{
 		cube->source->ceiling = ft_source_filling(line);
 		cube->utils.i++;
-		printf("C: %d, %d, %d\n", cube->source->ceiling[0], cube->source->ceiling[1], cube->source->ceiling[2]);
 	}
 }
 
@@ -443,6 +442,8 @@ int	ft_open(char *arg)
 	fd = open(arg, O_RDONLY);
 	return (fd);
 }
+
+//function too long
 
 t_cube	*start(char *arg)
 {
