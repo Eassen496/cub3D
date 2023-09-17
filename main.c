@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abitonti <abitonti@student.42mulhouse.f    +#+  +:+       +#+        */
+/*   By: ale-roux <ale-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 21:19:57 by ale-roux          #+#    #+#             */
-/*   Updated: 2023/09/13 08:30:13 by abitonti         ###   ########.fr       */
+/*   Updated: 2023/09/17 05:22:58 by ale-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -310,7 +310,15 @@ int	startpos(t_cube *cube, int x, int y)
 	return (0);
 }
 
-//function too long
+int	map_verif_bis(int x, int y, char **map, int max_x, int max_y)
+{
+	if (x == 0 || x == max_x - 1 || y == 0 || y == max_y - 1)
+		return (1);
+	if (map[y][x + 1] == ' ' || map[y][x - 1] == ' ')
+		return (1);
+	if (map[y + 1][x] == ' ' || map[y - 1][x] == ' ')
+		return (1);
+}
 
 int	map_verif(char **map, int max_y, int max_x, t_cube *cube)
 {
@@ -327,11 +335,7 @@ int	map_verif(char **map, int max_y, int max_x, t_cube *cube)
 				return (1);
 			if (map[y][x] == '0')
 			{
-				if (x == 0 || x == max_x - 1 || y == 0 || y == max_y - 1)
-					return (1);
-				if (map[y][x + 1] == ' ' || map[y][x - 1] == ' ')
-					return (1);
-				if (map[y + 1][x] == ' ' || map[y - 1][x] == ' ')
+				if (map_verif_bis(x, y, map, max_x, max_y) == 1)
 					return (1);
 			}
 			x++;
