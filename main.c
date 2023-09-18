@@ -6,7 +6,7 @@
 /*   By: ale-roux <ale-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 21:19:57 by ale-roux          #+#    #+#             */
-/*   Updated: 2023/09/19 00:01:57 by ale-roux         ###   ########.fr       */
+/*   Updated: 2023/09/19 01:31:12 by ale-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ char	*tmpstr(t_cube *cube)
 {
 	char	*map;
 
-	map = ft_calloc(1);
+	map = ft_calloc(1 * sizeof(char));
 	if (!map)
 	{
 		free(cube->source);
@@ -243,7 +243,7 @@ void	map_calculator(t_cube *cube, char *map)
 	}
 }
 
-int ft_freeall(t_cube *cube, char *str)
+int	ft_freeall(t_cube *cube, char *str)
 {
 	int	i;
 
@@ -257,8 +257,6 @@ int ft_freeall(t_cube *cube, char *str)
 	free(cube->source->south);
 	free(cube->source->west);
 	free(cube->source->east);
-	free(cube->source->floor);
-	free(cube->source->ceiling);
 	free(cube->source);
 	free(cube);
 	return (1);
@@ -284,8 +282,8 @@ t_source	*struct_init(t_cube *cube)
 	source->south = NULL;
 	source->east = NULL;
 	source->west = NULL;
-	source->floor = NULL;
-	source->ceiling = NULL;
+	cube->utils.floor = false;
+	cube->utils.ceiling = false;
 	return (source);
 }
 
@@ -294,7 +292,7 @@ int	startpos(t_cube *cube, int x, int y)
 	if (cube->angle != -1)
 		return (1);
 	if (cube->utils.map[y][x] == 'N')
-		cube->angle = 30;
+		cube->angle = 90;
 	else if (cube->utils.map[y][x] == 'S')
 		cube->angle = 270;
 	else if (cube->utils.map[y][x] == 'E')
@@ -310,10 +308,8 @@ int	startpos(t_cube *cube, int x, int y)
 	return (0);
 }
 
-int	map_verif_bis(int x, int y, char **map, int max_x, int max_y)
+int	map_verif_bis(int x, int y, char **map)
 {
-	if (x == 0 || x == max_x - 1 || y == 0 || y == max_y - 1)
-		return (1);
 	if (map[y][x + 1] == ' ' || map[y][x - 1] == ' ')
 		return (1);
 	if (map[y + 1][x] == ' ' || map[y - 1][x] == ' ')
@@ -336,7 +332,9 @@ int	map_verif(char **map, int max_y, int max_x, t_cube *cube)
 				return (1);
 			if (map[y][x] == '0')
 			{
-				if (map_verif_bis(x, y, map, max_x, max_y) == 1)
+				if (x == 0 || x == max_x - 1 || y == 0 || y == max_y - 1)
+					return (1);
+				if (map_verif_bis(x, y, map) == 1)
 					return (1);
 			}
 			x++;
@@ -348,17 +346,34 @@ int	map_verif(char **map, int max_y, int max_x, t_cube *cube)
 	return (0);
 }
 
-int	*ft_source_filling(char *line)
+uint32_t	uintfree(int one, int two, int tree)
 {
-	int	*ret;
-	int	i;
-	int	j;
+	int	a;
+
+	a = 255;
+	return (one << 24 | two << 16 | tree << 8 | a);
+}
+
+uint32_t	ft_uint32(int one, int two, int tree, int *tab)
+{
+	uint32_t	ret;
+
+	ret = uintfree(one, two, tree);
+	free(tab);
+	return (ret);
+}
+
+uint32_t	ft_source_filling(char *line)
+{
+	int			*ret;
+	int			i;
+	int			j;
 
 	i = 0;
 	j = 0;
 	ret = (int *)malloc(3 * sizeof(int));
 	if (!ret)
-		return (NULL);
+		return (0);
 	ret[0] = 0;
 	ret[1] = 0;
 	ret[2] = 0;
@@ -374,7 +389,7 @@ int	*ft_source_filling(char *line)
 	i++;
 	while (line[i] <= '9' && line[i] >= '0')
 		ret[j] = (ret[j] * 10) + line[i++] - 48;
-	return (ret);
+	return (ft_uint32(ret[0], ret[1], ret[2], ret));
 }
 
 int	map_formator(t_cube *cube, char *map)
@@ -408,22 +423,20 @@ void	finish_all(t_cube *cube)
 		cube->source->west = ft_calloc(1 * sizeof(char));
 	if (cube->source->east == NULL)
 		cube->source->east = ft_calloc(1 * sizeof(char));
-	if (cube->source->floor == NULL)
-		cube->source->floor = ft_calloc(1 * sizeof(int));
-	if (cube->source->ceiling == NULL)
-		cube->source->ceiling = ft_calloc(1 * sizeof(int));
 }
 
 void	source_fill2(char *line, t_cube *cube)
 {
-	if (ft_strncmp(line, "F ", 2) == 0 && cube->source->floor == NULL)
+	if (ft_strncmp(line, "F ", 2) == 0 && cube->utils.floor == false)
 	{
 		cube->source->floor = ft_source_filling(line);
+		cube->utils.floor = true;
 		cube->utils.i++;
 	}
-	else if (ft_strncmp(line, "C ", 2) == 0 && cube->source->ceiling == NULL)
+	else if (ft_strncmp(line, "C ", 2) == 0 && cube->utils.ceiling == false)
 	{
 		cube->source->ceiling = ft_source_filling(line);
+		cube->utils.ceiling = true;
 		cube->utils.i++;
 	}
 	else if (ft_strncmp(line, "EA ", 3) == 0 && cube->source->east == NULL)
@@ -469,7 +482,20 @@ int	ft_open(char *arg)
 	return (fd);
 }
 
+void	*fdfree(t_cube *cube)
+{
+	free(cube->source);
+	free(cube);
+	printf("Please give a valid file :D\n");
+	return (NULL);
+}
 //function too long
+
+void	*nullreturn(int	i)
+{
+	(void) i;
+	return (NULL);
+}
 
 t_cube	*start(char *arg)
 {
@@ -487,12 +513,7 @@ t_cube	*start(char *arg)
 		return (null_free(cube));
 	fd = ft_open(arg);
 	if (fd < 0)
-	{
-		free(cube->source);
-		free(cube);
-		printf("Please give a valid file :D\n");
-		return (NULL);
-	}
+		return (fdfree(cube));
 	while (cube->utils.i < 6)
 	{
 		line = get_next_line(fd);
@@ -500,10 +521,7 @@ t_cube	*start(char *arg)
 		free(line);
 	}
 	if (cube->utils.i == 7)
-	{
-		ft_freeall(cube, map);
-		return (NULL);
-	}
+		return (nullreturn(ft_freeall(cube, map)));
 	cube->utils.i = 0;
 	line = get_next_line(fd);
 	while (line)
