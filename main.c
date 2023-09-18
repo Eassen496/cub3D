@@ -6,7 +6,7 @@
 /*   By: ale-roux <ale-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 21:19:57 by ale-roux          #+#    #+#             */
-/*   Updated: 2023/09/17 05:22:58 by ale-roux         ###   ########.fr       */
+/*   Updated: 2023/09/19 00:01:57 by ale-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -318,6 +318,7 @@ int	map_verif_bis(int x, int y, char **map, int max_x, int max_y)
 		return (1);
 	if (map[y + 1][x] == ' ' || map[y - 1][x] == ' ')
 		return (1);
+	return (0);
 }
 
 int	map_verif(char **map, int max_y, int max_x, t_cube *cube)
@@ -397,6 +398,22 @@ int	map_formator(t_cube *cube, char *map)
 	return (0);
 }
 
+void	finish_all(t_cube *cube)
+{
+	if (cube->source->north == NULL)
+		cube->source->north = ft_calloc(1 * sizeof(char));
+	if (cube->source->south == NULL)
+		cube->source->south = ft_calloc(1 * sizeof(char));
+	if (cube->source->west == NULL)
+		cube->source->west = ft_calloc(1 * sizeof(char));
+	if (cube->source->east == NULL)
+		cube->source->east = ft_calloc(1 * sizeof(char));
+	if (cube->source->floor == NULL)
+		cube->source->floor = ft_calloc(1 * sizeof(int));
+	if (cube->source->ceiling == NULL)
+		cube->source->ceiling = ft_calloc(1 * sizeof(int));
+}
+
 void	source_fill2(char *line, t_cube *cube)
 {
 	if (ft_strncmp(line, "F ", 2) == 0 && cube->source->floor == NULL)
@@ -409,11 +426,21 @@ void	source_fill2(char *line, t_cube *cube)
 		cube->source->ceiling = ft_source_filling(line);
 		cube->utils.i++;
 	}
+	else if (ft_strncmp(line, "EA ", 3) == 0 && cube->source->east == NULL)
+	{
+		cube->source->east = ft_strdup(ft_strchr(line, '.'));
+		cube->utils.i++;
+	}
 }
 
 void	source_fill(char *line, t_cube *cube)
 {
-	if (ft_strncmp(line, "NO ", 3) == 0 && cube->source->north == NULL)
+	if (line == NULL)
+	{
+		cube->utils.i = 7;
+		finish_all(cube);
+	}
+	else if (ft_strncmp(line, "NO ", 3) == 0 && cube->source->north == NULL)
 	{
 		cube->source->north = ft_strdup(ft_strchr(line, '.'));
 		cube->utils.i++;
@@ -426,11 +453,6 @@ void	source_fill(char *line, t_cube *cube)
 	else if (ft_strncmp(line, "WE ", 3) == 0 && cube->source->west == NULL)
 	{
 		cube->source->west = ft_strdup(ft_strchr(line, '.'));
-		cube->utils.i++;
-	}
-	else if (ft_strncmp(line, "EA ", 3) == 0 && cube->source->east == NULL)
-	{
-		cube->source->east = ft_strdup(ft_strchr(line, '.'));
 		cube->utils.i++;
 	}
 	else
@@ -476,6 +498,11 @@ t_cube	*start(char *arg)
 		line = get_next_line(fd);
 		source_fill(line, cube);
 		free(line);
+	}
+	if (cube->utils.i == 7)
+	{
+		ft_freeall(cube, map);
+		return (NULL);
 	}
 	cube->utils.i = 0;
 	line = get_next_line(fd);
@@ -528,5 +555,13 @@ int	main(int argc, char **argv)
 	}
 	if (cube != NULL && printf("plop\n"))
 		ft_graphic(cube);
+	else
+	{
+		printf("ERROR\n");
+		free(cube);
+		system("leaks cub3d");
+		return (1);
+	}
+	system("leaks cub3d");
 	return (0);
 }
