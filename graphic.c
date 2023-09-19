@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   graphic.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ale-roux <ale-roux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abitonti <abitonti@student.42mulhouse.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 03:17:43 by abitonti          #+#    #+#             */
-/*   Updated: 2023/09/18 23:32:18 by ale-roux         ###   ########.fr       */
+/*   Updated: 2023/09/19 02:21:36 by abitonti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,23 +56,23 @@ void ft_hook(void* param)
 		mlx_close_window(cube->mlx);
 	if (mlx_is_key_down(cube->mlx, MLX_KEY_W))
 	{
-		dy -= round(5 * sin(cube->angle * M_PI / 180));
-		dx += round(5 * cos(cube->angle * M_PI / 180));
+		dy -= round(5 * sin(cube->angle * M_PI / 1800));
+		dx += round(5 * cos(cube->angle * M_PI / 1800));
 	}
 	if (mlx_is_key_down(cube->mlx, MLX_KEY_S))
 	{
-		dy += round(5 * sin(cube->angle * M_PI / 180));
-		dx -= round(5 * cos(cube->angle * M_PI / 180));
+		dy += round(5 * sin(cube->angle * M_PI / 1800));
+		dx -= round(5 * cos(cube->angle * M_PI / 1800));
 	}
 	if (mlx_is_key_down(cube->mlx, MLX_KEY_A))
 	{
-		dy -= round(5 * cos(cube->angle * M_PI / 180));
-		dx -= round(5 * sin(cube->angle * M_PI / 180));
+		dy -= round(5 * cos(cube->angle * M_PI / 1800));
+		dx -= round(5 * sin(cube->angle * M_PI / 1800));
 	}
 	if (mlx_is_key_down(cube->mlx, MLX_KEY_D))
 	{
-		dy += round(5 * cos(cube->angle * M_PI / 180));
-		dx += round(5 * sin(cube->angle * M_PI / 180));
+		dy += round(5 * cos(cube->angle * M_PI / 1800));
+		dx += round(5 * sin(cube->angle * M_PI / 1800));
 	}
 	if (dx > 0  && cube->map[cube->ypos / 100][(cube->xpos + 20) / 100] == '0')
 		cube->xpos += dx;
@@ -83,9 +83,9 @@ void ft_hook(void* param)
 	if (dy < 0  && cube->map[(cube->ypos - 20) / 100][cube->xpos / 100] == '0')
 		cube->ypos += dy;
 	if (mlx_is_key_down(cube->mlx, MLX_KEY_LEFT))
-		cube->angle = (cube->angle + 4) % 360;
+		cube->angle = (cube->angle + 40) % 3600;
 	if (mlx_is_key_down(cube->mlx, MLX_KEY_RIGHT))
-		cube->angle = (cube->angle + 356) % 360;
+		cube->angle = (cube->angle + 3560) % 3600;
 }
 /*
 void	mapinit(t_cube *cube)
@@ -146,26 +146,39 @@ float	ft_min(float a, float b)
 	return (b);
 }
 
+float	ft_max(float a, float b)
+{
+	if (a > b)
+		return (a);
+	return (b);
+}
+
 float	ft_nextwall_y(float a, t_cube *cube, int s)
 {
 	int		y;
 	int		x;
 
+	if (!a || a == 1800)
+		return (10000);
+	if (a < 1800)
+		s = -1;
 	x = cube->xpos;
 	y = cube->ypos;
 	y += s * (y % 100) + (1 + s) * (100 - y % 100);
-	x -= (y - cube->ypos) / tan(a * M_PI / 180);
-	if (!y || y / 100 == cube->mapheight - 1 || x / 100 < 0 || x / 100 > cube->mapwidth - 1)
+	x -= (y - cube->ypos) / tan(a * M_PI / 1800);
+	//x -= (y - cube->ypos) * tan(M_PI / 2 - a * M_PI / 180);
+	if (!y || y / 100 > cube->mapheight - 1 || x / 100 < 0 || x / 100 > cube->mapwidth - 1)
 		return (10000);
 	while (cube->map[y / 100 + s][x / 100] != '1')
 	{
 		y += (1 + 2 * s) * 100;
-		x -= (1 + 2 * s) * 100 / tan(a * M_PI / 180);
-		if (!y || y / 100 == cube->mapheight - 1 || x / 100 < 0 || x / 100 > cube->mapwidth - 1)
+		x -= (1 + 2 * s) * 100 / tan(a * M_PI / 1800);
+		//x -= (1 + 2 * s) * 100 / tan(M_PI / 2 - a * M_PI / 180);
+		if (!y || y / 100 > cube->mapheight - 1 || x / 100 < 0 || x / 100 > cube->mapwidth - 1)
 			return (10000);
 	}
 	printf("%d %d\n", x, y);
-	return ((cube->ypos - y) / sin(a * M_PI / 180));
+	return ((cube->ypos - y) / sin(a * M_PI / 1800));
 }
 
 float	ft_nextwall_x(float a, t_cube *cube, int s)
@@ -173,21 +186,25 @@ float	ft_nextwall_x(float a, t_cube *cube, int s)
 	int		y;
 	int		x;
 
+	if (a == 900 || a == 2700)
+		return (10000);
+	if (a < 900 || a > 2700)
+		s = 0;
 	x = cube->xpos;
 	y = cube->ypos;
 	x += s * (x % 100) + (1 + s) * (100 - x % 100);
-	y -= (x - cube->xpos) * tan(a * M_PI / 180);
-	if (!x || x / 100 == cube->mapwidth - 1 || y / 100 < 0 || y / 100 > cube->mapheight - 1)
+	y -= (x - cube->xpos) * tan(a * M_PI / 1800);
+	if (!x || x / 100 > cube->mapwidth - 1 || y / 100 < 0 || y / 100 > cube->mapheight - 1)
 		return (10000);
 	while (cube->map[y / 100][x / 100 + s] != '1')
 	{
 		x += (1 + 2 * s) * 100;
-		y -= (1 + 2 * s) * 100 * tan(a * M_PI / 180);
-		if (!x || x / 100 == cube->mapwidth - 1 || y / 100 < 0 || y / 100 > cube->mapheight - 1)
+		y -= (1 + 2 * s) * 100 * tan(a * M_PI / 1800);
+		if (!x || x / 100 > cube->mapwidth - 1 || y / 100 < 0 || y / 100 > cube->mapheight - 1)
 			return (10000);
 	}
 	printf("%d %d %f\n", x, y, a);
-	return ((x - cube->xpos) / cos(a * M_PI / 180));
+	return ((x - cube->xpos) / cos(a * M_PI / 1800));
 }
 
 
@@ -209,11 +226,11 @@ void	ft_displayme(t_cube *cube, int size)
 			mlx_put_pixel(cube->imap, a[0] + i, a[1] + j++, 0xFF0000FF);
 		i++;
 	}
-	distance = ft_min(ft_nextwall_y((float)cube->angle, cube, -1), ft_nextwall_x((float)cube->angle, cube, 0));
+	distance = ft_min(ft_nextwall_y((float)cube->angle, cube, 0), ft_nextwall_x((float)cube->angle, cube, -1));
 	printf("%f\n", distance);
 	distance *= (float) cube->imap->width / (100 * (float) cube->mapwidth);
-	b[0] = a[0] + round(distance * cos(cube->angle * M_PI / 180));
-	b[1] = a[1] - round(distance * sin(cube->angle * M_PI / 180));
+	b[0] = a[0] + round(distance * cos(cube->angle * M_PI / 1800));
+	b[1] = a[1] - round(distance * sin(cube->angle * M_PI / 1800));
 	drawline(cube->imap, a, b);
 }
 
@@ -251,16 +268,40 @@ void	ft_displayworld(void *param)
 	uint32_t	x;
 	float		angle;
 	float		distance;
+	int			a[2];
+	int			b[2];
 
 	cube = (t_cube *) param;
 	x = -1;
 	while (++x < cube->image->width)
 	{
-		angle = cube->angle - 45 + 90 * x / cube->image->width;
-		while (1)
+		angle = (cube->angle + 4050 - 900 * x / cube->image->width) % 3600;
+		distance = ft_min(ft_nextwall_y(angle, cube, 0), ft_nextwall_x(angle, cube, -1));
+		a[0] = x;
+		b[0] = x;
+		a[1] = ft_max(0, cube->image->height * (0.5 - atan(50 / distance) * 8 / (3 * M_PI)));
+		b[1] = ft_min(cube->image->height - 1, cube->image->height * (0.5 + atan(50 / distance) * 8 / (3 * M_PI)));
+		drawline(cube->image, a, b);
+	}
+}
+
+void	ft_displaybackground(void *param)
+{
+	uint32_t	x;
+	uint32_t	y;
+	t_cube		*cube;
+
+	cube = (t_cube *) param;
+	x = -1;
+	while (++x < cube->image->width)
+	{
+		y = -1;
+		while (++y < cube->image->height)
 		{
-			if (angle < 180)
-				distance = ft_nextwall_y(angle, cube, -1);
+			if (y < cube->image->height / 2)
+				mlx_put_pixel(cube->image, x, y, 0x000099FF);
+			else
+				mlx_put_pixel(cube->image, x, y, 0x111111FF);
 		}
 	}
 }
@@ -279,6 +320,8 @@ void ft_graphic(t_cube *cube)
 	//mlx_loop_hook(mlx, ft_randomize, mlx);
 	//mlx_resize_hook(mlx, ft_resize, );
 	//ft_displaymap(cube);
+	mlx_loop_hook(cube->mlx, ft_displaybackground, cube);
+	mlx_loop_hook(cube->mlx, ft_displayworld, cube);
 	mlx_loop_hook(cube->mlx, ft_displaymap, cube);
 	mlx_loop_hook(cube->mlx, ft_hook, cube);
 	mlx_loop(cube->mlx);

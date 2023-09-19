@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ale-roux <ale-roux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abitonti <abitonti@student.42mulhouse.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 21:19:57 by ale-roux          #+#    #+#             */
-/*   Updated: 2023/09/17 05:22:58 by ale-roux         ###   ########.fr       */
+/*   Updated: 2023/09/19 01:31:47 by abitonti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -294,13 +294,13 @@ int	startpos(t_cube *cube, int x, int y)
 	if (cube->angle != -1)
 		return (1);
 	if (cube->utils.map[y][x] == 'N')
-		cube->angle = 30;
+		cube->angle = 0;
 	else if (cube->utils.map[y][x] == 'S')
-		cube->angle = 270;
+		cube->angle = 2700;
 	else if (cube->utils.map[y][x] == 'E')
 		cube->angle = 0;
 	else if (cube->utils.map[y][x] == 'W')
-		cube->angle = 180;
+		cube->angle = 1800;
 	else
 		return (1);
 	cube->xpos = x * 100 + 50;
@@ -318,6 +318,7 @@ int	map_verif_bis(int x, int y, char **map, int max_x, int max_y)
 		return (1);
 	if (map[y + 1][x] == ' ' || map[y - 1][x] == ' ')
 		return (1);
+	return (0);
 }
 
 int	map_verif(char **map, int max_y, int max_x, t_cube *cube)
