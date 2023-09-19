@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   graphic.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abitonti <abitonti@student.42mulhouse.f    +#+  +:+       +#+        */
+/*   By: ale-roux <ale-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 03:17:43 by abitonti          #+#    #+#             */
-/*   Updated: 2023/09/19 02:21:36 by abitonti         ###   ########.fr       */
+/*   Updated: 2023/09/19 03:42:10 by ale-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -299,9 +299,9 @@ void	ft_displaybackground(void *param)
 		while (++y < cube->image->height)
 		{
 			if (y < cube->image->height / 2)
-				mlx_put_pixel(cube->image, x, y, 0x000099FF);
+				mlx_put_pixel(cube->image, x, y, cube->source->floor);
 			else
-				mlx_put_pixel(cube->image, x, y, 0x111111FF);
+				mlx_put_pixel(cube->image, x, y, cube->source->ceiling);
 		}
 	}
 }
