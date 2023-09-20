@@ -6,7 +6,7 @@
 /*   By: abitonti <abitonti@student.42mulhouse.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 21:11:39 by ale-roux          #+#    #+#             */
-/*   Updated: 2023/09/20 04:27:12 by abitonti         ###   ########.fr       */
+/*   Updated: 2023/09/20 05:58:30 by abitonti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,12 @@
 # include <stdio.h>
 # include <math.h>
 # include "MLX42.h"
+# ifndef HEIGHT
+#  define HEIGHT 2304
+# endif
+# ifndef WEIGHT
+#  define WEIGHT 1296
+# endif
 
 typedef struct s_utils
 {
