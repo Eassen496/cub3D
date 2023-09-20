@@ -6,7 +6,7 @@
 /*   By: ale-roux <ale-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 21:11:39 by ale-roux          #+#    #+#             */
-/*   Updated: 2023/09/19 01:19:13 by ale-roux         ###   ########.fr       */
+/*   Updated: 2023/09/20 04:59:08 by ale-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,12 @@
 # include <stdio.h>
 # include <math.h>
 # include "MLX42.h"
+# ifndef HEIGHT
+#  define HEIGHT 2304
+# endif
+# ifndef WEIGHT
+#  define WEIGHT 1296
+# endif
 
 typedef struct s_utils
 {
