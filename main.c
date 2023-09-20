@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abitonti <abitonti@student.42mulhouse.f    +#+  +:+       +#+        */
+/*   By: ale-roux <ale-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 21:19:57 by ale-roux          #+#    #+#             */
-/*   Updated: 2023/09/19 02:30:28 by abitonti         ###   ########.fr       */
+/*   Updated: 2023/09/20 02:31:13 by ale-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -292,13 +292,13 @@ int	startpos(t_cube *cube, int x, int y)
 	if (cube->angle != -1)
 		return (1);
 	if (cube->utils.map[y][x] == 'N')
-		cube->angle = 900;
+		cube->angle = 90;
 	else if (cube->utils.map[y][x] == 'S')
-		cube->angle = 2700;
+		cube->angle = 270;
 	else if (cube->utils.map[y][x] == 'E')
 		cube->angle = 0;
 	else if (cube->utils.map[y][x] == 'W')
-		cube->angle = 1800;
+		cube->angle = 180;
 	else
 		return (1);
 	cube->xpos = x * 100 + 50;
@@ -328,9 +328,9 @@ int	map_verif(char **map, int max_y, int max_x, t_cube *cube)
 		x = 0;
 		while (x < max_x)
 		{
-			if (map[y][x] >= 'A' && map[y][x] <= 'Z' && startpos(cube, x, y))
+			if (map[y][x] >= 'A' && map[y][x] <= 'Z' && map[y][x] != 'D' && startpos(cube, x, y))
 				return (1);
-			if (map[y][x] == '0')
+			if (map[y][x] == '0' || map[y][x] == 'D')
 			{
 				if (x == 0 || x == max_x - 1 || y == 0 || y == max_y - 1)
 					return (1);
@@ -491,7 +491,7 @@ void	*fdfree(t_cube *cube)
 }
 //function too long
 
-void	*nullreturn(int	i)
+void	*nullreturn(int i)
 {
 	(void) i;
 	return (NULL);
