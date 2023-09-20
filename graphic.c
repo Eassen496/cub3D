@@ -6,7 +6,7 @@
 /*   By: ale-roux <ale-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 03:17:43 by abitonti          #+#    #+#             */
-/*   Updated: 2023/09/19 03:42:10 by ale-roux         ###   ########.fr       */
+/*   Updated: 2023/09/20 02:52:35 by ale-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,13 +74,13 @@ void ft_hook(void* param)
 		dy += round(5 * cos(cube->angle * M_PI / 1800));
 		dx += round(5 * sin(cube->angle * M_PI / 1800));
 	}
-	if (dx > 0  && cube->map[cube->ypos / 100][(cube->xpos + 20) / 100] == '0')
+	if (dx > 0  && (cube->map[cube->ypos / 100][(cube->xpos + 20) / 100] == '0' || cube->map[cube->ypos / 100][(cube->xpos + 20) / 100] == 'D'))
 		cube->xpos += dx;
-	if (dx < 0  && cube->map[cube->ypos / 100][(cube->xpos - 20) / 100] == '0')
+	if (dx < 0  && (cube->map[cube->ypos / 100][(cube->xpos - 20) / 100] == '0' || cube->map[cube->ypos / 100][(cube->xpos - 20) / 100] == 'D'))
 		cube->xpos += dx;
-	if (dy > 0  && cube->map[(cube->ypos + 20) / 100][cube->xpos / 100] == '0')
+	if (dy > 0  && (cube->map[(cube->ypos + 20) / 100][cube->xpos / 100] == '0' || cube->map[(cube->ypos + 20) / 100][cube->xpos / 100] == 'D'))
 		cube->ypos += dy;
-	if (dy < 0  && cube->map[(cube->ypos - 20) / 100][cube->xpos / 100] == '0')
+	if (dy < 0  && (cube->map[(cube->ypos - 20) / 100][cube->xpos / 100] == '0' || cube->map[(cube->ypos - 20) / 100][cube->xpos / 100] == 'D'))
 		cube->ypos += dy;
 	if (mlx_is_key_down(cube->mlx, MLX_KEY_LEFT))
 		cube->angle = (cube->angle + 40) % 3600;
@@ -169,7 +169,7 @@ float	ft_nextwall_y(float a, t_cube *cube, int s)
 	//x -= (y - cube->ypos) * tan(M_PI / 2 - a * M_PI / 180);
 	if (!y || y / 100 > cube->mapheight - 1 || x / 100 < 0 || x / 100 > cube->mapwidth - 1)
 		return (10000);
-	while (cube->map[y / 100 + s][x / 100] != '1')
+	while (cube->map[y / 100 + s][x / 100] != '1' && ((cube->map[y / 100 + s][x / 100] != 'D') && ((cube->ypos - y) / sin(a * M_PI / 1800) > 200)))
 	{
 		y += (1 + 2 * s) * 100;
 		x -= (1 + 2 * s) * 100 / tan(a * M_PI / 1800);
@@ -196,7 +196,7 @@ float	ft_nextwall_x(float a, t_cube *cube, int s)
 	y -= (x - cube->xpos) * tan(a * M_PI / 1800);
 	if (!x || x / 100 > cube->mapwidth - 1 || y / 100 < 0 || y / 100 > cube->mapheight - 1)
 		return (10000);
-	while (cube->map[y / 100][x / 100 + s] != '1')
+	while (cube->map[y / 100][x / 100 + s] != '1' || (cube->map[y / 100][x / 100 + s] != 'D' && (x - cube->xpos) / cos(a * M_PI / 1800) < 200))
 	{
 		x += (1 + 2 * s) * 100;
 		y -= (1 + 2 * s) * 100 * tan(a * M_PI / 1800);
@@ -252,11 +252,13 @@ void	ft_displaymap(void *param)
 			i = x * cube->mapwidth / cube->imap->width;
 			j = y * cube->mapheight / cube->imap->height;
 			if (cube->map[j][i] == ' ' || !x || !y || (x + 1) * cube->mapwidth / cube->imap->width > i || (y + 1) * cube->mapheight / cube->imap->height > j)
-				mlx_put_pixel(cube->imap, x, y, 0x333333FF);
+				mlx_put_pixel(cube->imap, x, y, 0xFFFFFF00);
 			else if (cube->map[j][i] == '1')
 				mlx_put_pixel(cube->imap, x, y, 0xFFFFFFFF);
 			else if (cube->map[j][i] == '0')
 				mlx_put_pixel(cube->imap, x, y, 0x000000FF);
+			else if (cube->map[j][i] == 'D')
+				mlx_put_pixel(cube->imap, x, y, 0xDEB887FF);
 		}
 	}
 	ft_displayme(cube, cube->imap->width / (10 * cube->mapwidth));
