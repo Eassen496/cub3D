@@ -6,7 +6,7 @@
 /*   By: ale-roux <ale-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 03:17:43 by abitonti          #+#    #+#             */
-/*   Updated: 2023/09/20 02:52:35 by ale-roux         ###   ########.fr       */
+/*   Updated: 2023/09/20 02:56:23 by ale-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,15 +166,14 @@ float	ft_nextwall_y(float a, t_cube *cube, int s)
 	y = cube->ypos;
 	y += s * (y % 100) + (1 + s) * (100 - y % 100);
 	x -= (y - cube->ypos) / tan(a * M_PI / 1800);
-	//x -= (y - cube->ypos) * tan(M_PI / 2 - a * M_PI / 180);
-	if (!y || y / 100 > cube->mapheight - 1 || x / 100 < 0 || x / 100 > cube->mapwidth - 1)
+	if (!y || y / 100 > cube->mapheight - 1 || x < 0 || x / 100 > cube->mapwidth - 1)
 		return (10000);
 	while (cube->map[y / 100 + s][x / 100] != '1' && ((cube->map[y / 100 + s][x / 100] != 'D') && ((cube->ypos - y) / sin(a * M_PI / 1800) > 200)))
 	{
 		y += (1 + 2 * s) * 100;
-		x -= (1 + 2 * s) * 100 / tan(a * M_PI / 1800);
-		//x -= (1 + 2 * s) * 100 / tan(M_PI / 2 - a * M_PI / 180);
-		if (!y || y / 100 > cube->mapheight - 1 || x / 100 < 0 || x / 100 > cube->mapwidth - 1)
+		//x -= (1 + 2 * s) * 100 / tan(a * M_PI / 1800);
+		x = cube->xpos - (y - cube->ypos) / tan(a * M_PI / 1800);
+		if (!y || y / 100 > cube->mapheight - 1 || x < 0 || x / 100 > cube->mapwidth - 1)
 			return (10000);
 	}
 	printf("%d %d\n", x, y);
@@ -199,7 +198,8 @@ float	ft_nextwall_x(float a, t_cube *cube, int s)
 	while (cube->map[y / 100][x / 100 + s] != '1' || (cube->map[y / 100][x / 100 + s] != 'D' && (x - cube->xpos) / cos(a * M_PI / 1800) < 200))
 	{
 		x += (1 + 2 * s) * 100;
-		y -= (1 + 2 * s) * 100 * tan(a * M_PI / 1800);
+		//y -= (1 + 2 * s) * 100 * tan(a * M_PI / 1800);
+		y = cube->ypos - (x - cube->xpos) * tan(a * M_PI / 1800);
 		if (!x || x / 100 > cube->mapwidth - 1 || y / 100 < 0 || y / 100 > cube->mapheight - 1)
 			return (10000);
 	}
@@ -301,9 +301,9 @@ void	ft_displaybackground(void *param)
 		while (++y < cube->image->height)
 		{
 			if (y < cube->image->height / 2)
-				mlx_put_pixel(cube->image, x, y, cube->source->floor);
-			else
 				mlx_put_pixel(cube->image, x, y, cube->source->ceiling);
+			else
+				mlx_put_pixel(cube->image, x, y, cube->source->floor);
 		}
 	}
 }
