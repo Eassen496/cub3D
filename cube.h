@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ale-roux <ale-roux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abitonti <abitonti@student.42mulhouse.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 21:11:39 by ale-roux          #+#    #+#             */
-/*   Updated: 2023/09/19 01:19:13 by ale-roux         ###   ########.fr       */
+/*   Updated: 2023/09/20 04:27:12 by abitonti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,21 @@ typedef struct s_source
 	uint32_t	ceiling;
 }				t_source;
 
+
+typedef struct s_texture
+{
+	int			height;
+	int			width;
+	uint32_t	**mat;
+}				t_texture;
+
+typedef struct s_point
+{
+	float		distance;
+	int			height;
+	uint32_t	*column;
+}				t_point;
+
 typedef struct s_cube
 {
 	mlx_t		*mlx;
@@ -53,6 +68,7 @@ typedef struct s_cube
 	int			xpos;
 	int			ypos;
 	int			angle;
+	t_texture	textures[4];
 }				t_cube;
 
 char	*get_next_line(int fd);
