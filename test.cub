@@ -3,9 +3,6 @@ NO ./path_to_the_north_texture
 EA ./path_to_the_east_texture
 WE ./path_to_the_west_texture
 
-F 0,100,125
-C 0,30,250
-
 F 30,30,30
 C 30,30,200
 
