@@ -6,7 +6,7 @@
 /*   By: ale-roux <ale-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 03:17:43 by abitonti          #+#    #+#             */
-/*   Updated: 2023/09/20 05:07:11 by ale-roux         ###   ########.fr       */
+/*   Updated: 2023/09/20 05:18:12 by ale-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,13 +175,6 @@ float	ft_max(float a, float b)
 	if (a > b)
 		return (a);
 	return (b);
-}
-
-int	ft_abs(int n)
-{
-	if (n < 0)
-		return (-n);
-	return (n);
 }
 
 float	ft_nextwall_y(float a, t_cube *cube, int s)
