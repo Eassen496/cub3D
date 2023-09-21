@@ -6,7 +6,7 @@
 /*   By: abitonti <abitonti@student.42mulhouse.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 21:19:57 by ale-roux          #+#    #+#             */
-/*   Updated: 2023/09/21 04:18:39 by abitonti         ###   ########.fr       */
+/*   Updated: 2023/09/21 04:57:46 by abitonti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -301,8 +301,8 @@ int	startpos(t_cube *cube, int x, int y)
 		cube->angle = 1800;
 	else
 		return (1);
-	cube->xpos = x * 100 + 50;
-	cube->ypos = y * 100 + 50;
+	cube->xpos = x * 1000 + 500;
+	cube->ypos = y * 1000 + 500;
 	cube->utils.map[y][x] = '0';
 	printf("depart : %d %d\n", x, y);
 	return (0);
