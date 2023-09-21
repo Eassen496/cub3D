@@ -6,7 +6,7 @@
 /*   By: abitonti <abitonti@student.42mulhouse.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 03:17:43 by abitonti          #+#    #+#             */
-/*   Updated: 2023/09/20 05:59:18 by abitonti         ###   ########.fr       */
+/*   Updated: 2023/09/21 04:13:22 by abitonti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,8 @@ void ft_hook(void* param)
 	dy = 0;
 	speed = 1;
 	cube = (t_cube *) param;
-	mx = HEIGHT / 2;
-	my = WEIGHT / 2;
+	mx = cube->mlx->width / 2;
+	my = cube->mlx->height / 2;
 	mlx_get_mouse_pos(cube->mlx, &mx, &my);
 	if (mlx_is_key_down(cube->mlx, MLX_KEY_ESCAPE))
 		mlx_close_window(cube->mlx);
@@ -93,19 +93,19 @@ void ft_hook(void* param)
 		cube->ypos += dy;
 	if (dy < 0  && (cube->map[(cube->ypos - 20) / 100][cube->xpos / 100] == '0' || cube->map[(cube->ypos - 20) / 100][cube->xpos / 100] == 'D'))
 		cube->ypos += dy;
-	if (mlx_is_key_down(cube->mlx, MLX_KEY_LEFT) || mx < (HEIGHT / 2) - 5)
+	if (mlx_is_key_down(cube->mlx, MLX_KEY_LEFT) || mx < (WIDTH / 2) - 5)
 	{
 		cube->angle = (cube->angle + 80) % 3600;
-		mlx_set_mouse_pos(cube->mlx, HEIGHT / 2, WEIGHT / 2);
+		mlx_set_mouse_pos(cube->mlx, WIDTH / 2, HEIGHT / 2);
 	}
-	if (mlx_is_key_down(cube->mlx, MLX_KEY_RIGHT) || mx > (HEIGHT / 2) + 5)
+	if (mlx_is_key_down(cube->mlx, MLX_KEY_RIGHT) || mx > (WIDTH / 2) + 5)
 	{
 		cube->angle = (cube->angle + 3520) % 3600;
-		mlx_set_mouse_pos(cube->mlx, HEIGHT / 2, WEIGHT / 2);
+		mlx_set_mouse_pos(cube->mlx, WIDTH / 2, HEIGHT / 2);
 	}
 }
 
-void	textinit(t_cube *cube)
+/*void	textinit(t_cube *cube)
 {
 	int	i;
 	int	x;
@@ -114,8 +114,8 @@ void	textinit(t_cube *cube)
 	i = -1;
 	while (++i < 4)
 	{
-		cube->textures[i].height = 4;
-		cube->textures[i].width = 4;
+		cube->textures[i].height = 9;
+		cube->textures[i].width = 9;
 		cube->textures[i].mat = malloc(cube->textures[i].width * sizeof(uint32_t*));
 		x = -1;
 		while (++x < cube->textures[i].width)
@@ -130,6 +130,14 @@ void	textinit(t_cube *cube)
 			}
 		}
 	}
+}*/
+
+void	textinit(t_cube *cube)
+{
+	cube->textures[0] = mlx_texture_to_image(cube->mlx, mlx_load_png(cube->source->north));
+	cube->textures[1] = mlx_texture_to_image(cube->mlx, mlx_load_png(cube->source->south));
+	cube->textures[2] = mlx_texture_to_image(cube->mlx, mlx_load_png(cube->source->east));
+	cube->textures[3] = mlx_texture_to_image(cube->mlx, mlx_load_png(cube->source->west));
 }
 
 static void	drawline(mlx_image_t *image, int *a, int *b)
@@ -155,13 +163,6 @@ static void	drawline(mlx_image_t *image, int *a, int *b)
 		y = round((a[1] * i + b[1] * (max - i)) / max);
 		mlx_put_pixel(image, x, y, 0xFF0000FF);
 	}
-}
-
-int	ft_abs(int n)
-{
-	if (n < 0)
-		return (-n);
-	return (n);
 }
 
 float	ft_min(float a, float b)
@@ -237,7 +238,7 @@ float	ft_nextwall_x(float a, t_cube *cube, int s)
 	return ((x - cube->xpos) / cos(a * M_PI / 1800));
 }*/
 
-float	ft_nextwall_y(float a, t_cube *cube, int s, t_point *point)
+float	ft_nextwall_y(float a, t_cube *cube, int s, t_point *p)
 {
 	int		y;
 	int		x;
@@ -259,16 +260,19 @@ float	ft_nextwall_y(float a, t_cube *cube, int s, t_point *point)
 		if (!y || y / 100 > cube->mapheight - 1 || x < 0 || x / 100 > cube->mapwidth - 1)
 			return (10000);
 	}
-	if (point && point->distance > (cube->ypos - y) / sin(a * M_PI / 1800))
+	if (p && p->distance > (cube->ypos - y) / sin(a * M_PI / 1800))
 	{
-		point->distance = (cube->ypos - y) / sin(a * M_PI / 1800);
-		point->height = cube->textures[1 + s].height;
-		point->column = cube->textures->mat[cube->textures[1 + s].width * (((-1 - 2 * s) * (x % 100) + 100) % 100) / 100];
+		/*p->distance = (cube->ypos - y) / sin(a * M_PI / 1800);
+		p->height = cube->textures[1 + s].height;
+		p->column = cube->textures->mat[cube->textures[1 + s].width * abs((-1 - 2 * s) * (x % 100)) / 100];*/
+		p->distance = (cube->ypos - y) / sin(a * M_PI / 1800);
+		p->texture = cube->textures[1 + s];
+		p->x = (x % 100) * p->texture->width / 100;
 	}
 	return ((cube->ypos - y) / sin(a * M_PI / 1800));
 }
 
-float	ft_nextwall_x(float a, t_cube *cube, int s, t_point *point)
+float	ft_nextwall_x(float a, t_cube *cube, int s, t_point *p)
 {
 	int		y;
 	int		x;
@@ -290,11 +294,14 @@ float	ft_nextwall_x(float a, t_cube *cube, int s, t_point *point)
 		if (!x || x / 100 > cube->mapwidth - 1 || y / 100 < 0 || y / 100 > cube->mapheight - 1)
 			return (10000);
 	}
-	if (point && point->distance > (x - cube->xpos) / cos(a * M_PI / 1800))
+	if (p && p->distance > (x - cube->xpos) / cos(a * M_PI / 1800))
 	{
-		point->distance = (x - cube->xpos) / cos(a * M_PI / 1800);
-		point->height = cube->textures[3 + s].height;
-		point->column = cube->textures->mat[cube->textures[3 + s].width * (((1 + 2 * s) * (y % 100) + 100) % 100) / 100];
+		/*p->distance = (x - cube->xpos) / cos(a * M_PI / 1800);
+		p->height = cube->textures[3 + s].height;
+		p->column = cube->textures->mat[cube->textures[3 + s].width * abs((1 + 2 * s) * (y % 100) % 100) / 100];*/
+		p->distance = (x - cube->xpos) / cos(a * M_PI / 1800);
+		p->texture = cube->textures[3 + s];
+		p->x = (y % 100) * p->texture->width / 100;
 	}
 	return ((x - cube->xpos) / cos(a * M_PI / 1800));
 }
@@ -358,17 +365,20 @@ void	ft_displaymap(void *param)
 
 void	ft_drawcol(t_cube *cube,t_point point, uint32_t x)
 {
-	int	height;
-	int	i;
+	int			height;
+	int			i;
 	uint32_t	y;
+	int			h;
 
-	height = cube->image->height * atan(50 / point.distance) * 8 / (3 * M_PI);
+	height = 2 * cube->image->height * atan(50 / point.distance) * 8 / (3 * M_PI);
 	i = -1;
 	while (++i < height)
 	{
 		y = ((int) cube->image->height - height) / 2 + i;
+		h = i * point.texture->height / height;
 		if (y >= 0 && y < cube->image->height)
-			mlx_put_pixel(cube->image, x, y, point.column[i * point.height / height]);
+			//mlx_put_pixel(cube->image, x, y, point.column[i * point.height / height]);
+			mlx_put_pixel(cube->image, x, y, ((uint32_t *)point.texture->pixels)[point.x + h * point.texture->width]);
 	}
 }
 
@@ -427,7 +437,7 @@ void ft_graphic(t_cube *cube)
 	cube->map = cube->utils.map;
 	cube->mapwidth = cube->utils.lenght;
 	cube->mapheight = cube->utils.height;
-	cube->mlx = mlx_init(HEIGHT, WEIGHT, "cub3D", 1);
+	cube->mlx = mlx_init(WIDTH, HEIGHT, "cub3D", 1);
 	cube->image = mlx_new_image(cube->mlx, cube->mlx->width, cube->mlx->height);
 	cube->imap = mlx_new_image(cube->mlx, cube->mlx->width / 2, cube->mlx->width * cube->mapheight / (cube->mapwidth * 2));
 	mlx_image_to_window(cube->mlx, cube->image, 0, 0);

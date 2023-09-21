@@ -6,7 +6,7 @@
 /*   By: abitonti <abitonti@student.42mulhouse.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 21:11:39 by ale-roux          #+#    #+#             */
-/*   Updated: 2023/09/20 05:58:30 by abitonti         ###   ########.fr       */
+/*   Updated: 2023/09/21 04:12:54 by abitonti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@
 # include <math.h>
 # include "MLX42.h"
 # ifndef HEIGHT
-#  define HEIGHT 2304
+#  define HEIGHT 900
 # endif
-# ifndef WEIGHT
-#  define WEIGHT 1296
+# ifndef WIDTH
+#  define WIDTH 1200
 # endif
 
 typedef struct s_utils
@@ -47,35 +47,42 @@ typedef struct s_source
 }				t_source;
 
 
-typedef struct s_texture
+/*typedef struct s_texture
 {
 	int			height;
 	int			width;
 	uint32_t	**mat;
-}				t_texture;
+}				t_texture;*/
 
-typedef struct s_point
+/*typedef struct s_point
 {
 	float		distance;
 	int			height;
 	uint32_t	*column;
-}				t_point;
+}				t_point;*/
+
+typedef struct s_point
+{
+	float			distance;
+	int				x;
+	mlx_image_t		*texture;
+}					t_point;
 
 typedef struct s_cube
 {
-	mlx_t		*mlx;
-	mlx_image_t	*image;
-	t_source	*source;
-	t_utils		utils;
-	int			mapwidth;
-	int			mapheight;
-	mlx_image_t	*imap;
-	char		**map;
-	int			xpos;
-	int			ypos;
-	int			angle;
-	t_texture	textures[4];
-}				t_cube;
+	mlx_t			*mlx;
+	mlx_image_t		*image;
+	t_source		*source;
+	t_utils			utils;
+	int				mapwidth;
+	int				mapheight;
+	mlx_image_t		*imap;
+	char			**map;
+	int				xpos;
+	int				ypos;
+	int				angle;
+	mlx_image_t		*textures[4];
+}					t_cube;
 
 char	*get_next_line(int fd);
 void	ft_graphic(t_cube *cube);
