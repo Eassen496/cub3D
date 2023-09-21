@@ -6,7 +6,7 @@
 /*   By: abitonti <abitonti@student.42mulhouse.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 03:17:43 by abitonti          #+#    #+#             */
-/*   Updated: 2023/09/21 04:13:22 by abitonti         ###   ########.fr       */
+/*   Updated: 2023/09/21 04:18:07 by abitonti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,8 @@ void ft_hook(void* param)
 	dy = 0;
 	speed = 1;
 	cube = (t_cube *) param;
-	mx = cube->mlx->width / 2;
-	my = cube->mlx->height / 2;
+	mx = WIDTH / 2;
+	my = HEIGHT / 2;
 	mlx_get_mouse_pos(cube->mlx, &mx, &my);
 	if (mlx_is_key_down(cube->mlx, MLX_KEY_ESCAPE))
 		mlx_close_window(cube->mlx);
@@ -177,13 +177,6 @@ float	ft_max(float a, float b)
 	if (a > b)
 		return (a);
 	return (b);
-}
-
-int	ft_abs(int n)
-{
-	if (n < 0)
-		return (-n);
-	return (n);
 }
 
 /*float	ft_nextwall_y(float a, t_cube *cube, int s)
