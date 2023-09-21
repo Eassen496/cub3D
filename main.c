@@ -6,7 +6,7 @@
 /*   By: ale-roux <ale-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 21:19:57 by ale-roux          #+#    #+#             */
-/*   Updated: 2023/09/20 05:05:05 by ale-roux         ###   ########.fr       */
+/*   Updated: 2023/09/21 02:50:11 by ale-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ char	*ft_strdup(char *s1)
 	dup = malloc((len + 1) * sizeof(char));
 	if (!dup)
 		return (NULL);
-	while (s1[i])
+	while (s1[i] && s1[i] != '\n')
 	{
 		dup[i] = s1[i];
 		i++;
@@ -512,7 +512,7 @@ t_cube	*start(char *arg)
 	if (!cube->source)
 		return (null_free(cube));
 	fd = ft_open(arg);
-	if (fd < 0)
+	if (fd < 2)
 		return (fdfree(cube));
 	while (cube->utils.i < 6)
 	{

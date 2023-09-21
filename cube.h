@@ -6,7 +6,7 @@
 /*   By: ale-roux <ale-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 21:11:39 by ale-roux          #+#    #+#             */
-/*   Updated: 2023/09/20 04:59:08 by ale-roux         ###   ########.fr       */
+/*   Updated: 2023/09/20 07:12:55 by ale-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,8 @@
 # include <stdio.h>
 # include <math.h>
 # include "MLX42.h"
-# ifndef HEIGHT
-#  define HEIGHT 2304
-# endif
-# ifndef WEIGHT
-#  define WEIGHT 1296
-# endif
+# define HEIGHT 1600
+# define WIDHT 900
 
 typedef struct s_utils
 {
@@ -46,6 +42,21 @@ typedef struct s_source
 	uint32_t	ceiling;
 }				t_source;
 
+
+typedef struct s_texture
+{
+	int			height;
+	int			width;
+	uint32_t	**mat;
+}				t_texture;
+
+typedef struct s_point
+{
+	float		distance;
+	int			height;
+	uint32_t	*column;
+}				t_point;
+
 typedef struct s_cube
 {
 	mlx_t		*mlx;
@@ -59,6 +70,7 @@ typedef struct s_cube
 	int			xpos;
 	int			ypos;
 	int			angle;
+	t_texture	textures[4];
 }				t_cube;
 
 char	*get_next_line(int fd);
