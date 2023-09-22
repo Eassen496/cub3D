@@ -62,15 +62,27 @@ void ft_hook(void* param)
 		cube->ypos += dy;
 	if (dy < 0  && (cube->map[(cube->ypos - 200) / 1000][cube->xpos / 1000] == '0' || cube->map[(cube->ypos - 200) / 1000][cube->xpos / 1000] == 'D'))
 		cube->ypos += dy;
-	if (mlx_is_key_down(cube->mlx, MLX_KEY_LEFT) || mx < (WIDTH / 2) - 5)
+	if (mlx_is_key_down(cube->mlx, MLX_KEY_LEFT) || ((mx < (WIDTH / 2) - 5) && cube->utils.mouse == true))
 	{
 		cube->angle = (cube->angle + 80) % 3600;
-		mlx_set_mouse_pos(cube->mlx, WIDTH / 2, HEIGHT / 2);
+		if (cube->utils.mouse == true)
+			mlx_set_mouse_pos(cube->mlx, WIDTH / 2, HEIGHT / 2);
 	}
-	if (mlx_is_key_down(cube->mlx, MLX_KEY_RIGHT) || mx > (WIDTH / 2) + 5)
+	if (mlx_is_key_down(cube->mlx, MLX_KEY_RIGHT) || ((mx > (WIDTH / 2) + 5) && cube->utils.mouse == true))
 	{
 		cube->angle = (cube->angle + 3520) % 3600;
-		mlx_set_mouse_pos(cube->mlx, WIDTH / 2, HEIGHT / 2);
+		if (cube->utils.mouse == true)
+			mlx_set_mouse_pos(cube->mlx, WIDTH / 2, HEIGHT / 2);
+	}
+	if (mlx_is_key_down(cube->mlx, MLX_KEY_SPACE) && cube->utils.mouse == true)
+	{
+		cube->utils.mouse = false;
+		mlx_set_cursor_mode(cube->mlx, MLX_MOUSE_NORMAL);
+	}
+	else if (mlx_is_key_down(cube->mlx, MLX_KEY_M) && cube->utils.mouse == false)
+	{
+		cube->utils.mouse = true;
+		mlx_set_cursor_mode(cube->mlx, MLX_MOUSE_HIDDEN);
 	}
 }
 

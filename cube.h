@@ -29,6 +29,7 @@ typedef struct s_utils
 	int		height;
 	bool	floor;
 	bool	ceiling;
+	bool	mouse;
 	char	**map;
 }				t_utils;
 

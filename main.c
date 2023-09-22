@@ -287,6 +287,7 @@ t_source	*struct_init(t_cube *cube)
 	source->west = NULL;
 	cube->utils.floor = false;
 	cube->utils.ceiling = false;
+	cube->utils.mouse = true;
 	return (source);
 }
 
