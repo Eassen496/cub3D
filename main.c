@@ -6,7 +6,7 @@
 /*   By: abitonti <abitonti@student.42mulhouse.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 21:19:57 by ale-roux          #+#    #+#             */
-/*   Updated: 2023/09/21 04:57:46 by abitonti         ###   ########.fr       */
+/*   Updated: 2023/09/23 01:01:56 by abitonti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -250,6 +250,8 @@ int	ft_freeall(t_cube *cube, char *str)
 	i = 0;
 	if (str != NULL)
 		free(str);
+	if (cube->mlx)
+		mlx_terminate(cube->mlx);
 	while (i < cube->utils.height)
 		free(cube->utils.map[i++]);
 	free(cube->utils.map);
@@ -266,12 +268,13 @@ t_source	*struct_init(t_cube *cube)
 {
 	t_source	*source;
 
-	source = (t_source *)malloc(1 * sizeof(t_source));
+	source = malloc(sizeof(t_source));
 	if (!source)
 	{
 		free(cube);
 		return (NULL);
 	}
+	cube->mlx = 0;
 	cube->angle = -1;
 	cube->xpos = -1;
 	cube->ypos = -1;
@@ -289,6 +292,8 @@ t_source	*struct_init(t_cube *cube)
 
 int	startpos(t_cube *cube, int x, int y)
 {
+	if (cube->utils.map[y][x] == 'D')
+		return (0);
 	if (cube->angle != -1)
 		return (1);
 	if (cube->utils.map[y][x] == 'N')
@@ -304,7 +309,6 @@ int	startpos(t_cube *cube, int x, int y)
 	cube->xpos = x * 1000 + 500;
 	cube->ypos = y * 1000 + 500;
 	cube->utils.map[y][x] = '0';
-	printf("depart : %d %d\n", x, y);
 	return (0);
 }
 
@@ -328,7 +332,7 @@ int	map_verif(char **map, int max_y, int max_x, t_cube *cube)
 		x = 0;
 		while (x < max_x)
 		{
-			if (map[y][x] >= 'A' && map[y][x] <= 'Z' && map[y][x] != 'D' && startpos(cube, x, y))
+			if (map[y][x] >= 'A' && map[y][x] <= 'Z' && startpos(cube, x, y))
 				return (1);
 			if (map[y][x] == '0' || map[y][x] == 'D')
 			{
@@ -504,7 +508,7 @@ t_cube	*start(char *arg)
 	char	*line;
 	char	*map;
 
-	cube = (t_cube *)malloc(1 * sizeof(t_cube));
+	cube = malloc(sizeof(t_cube));
 	if (!cube)
 		return (NULL);
 	cube->source = struct_init(cube);
@@ -542,15 +546,15 @@ void	print_help(char *exec)
 	printf("|| Name of program: %s\t\t\t\t\t||\n", exec);
 	printf("|| launch program : ./%s <*.cub>\t\t\t\t||\n", exec);
 	printf("|| Control        :\t\t\t\t\t\t||\n");
-	printf("||\t  - [Esc] : close the program\t\t\t\t||\n");
-	printf("||\t  - [W]   : move straight \t\t\t\t||\n");
-	printf("||\t  - [A]   : move left\t\t\t\t\t||\n");
-	printf("||\t  - [S]   : move back\t\t\t\t\t||\n");
-	printf("||\t  - [D]   : move right\t\t\t\t\t||\n");
-	printf("||\t  - [↑]   : move straight\t\t\t\t||\n");
-	printf("||\t  - [↓]   : move back\t\t\t\t\t||\n");
-	printf("||\t  - [→]   : move camera right\t\t\t\t||\n");
-	printf("||\t  - [←]   : move camera left\t\t\t\t||\n");
+	printf("||\t  - [Esc] \t: close the program\t\t\t||\n");
+	printf("||\t  - [W]   \t: move straight \t\t\t||\n");
+	printf("||\t  - [A]   \t: move left\t\t\t\t||\n");
+	printf("||\t  - [S]   \t: move back\t\t\t\t||\n");
+	printf("||\t  - [D]   \t: move right\t\t\t\t||\n");
+	printf("||\t  - [→]   \t: move camera right\t\t\t||\n");
+	printf("||\t  - [←]   \t: move camera left\t\t\t||\n");
+	printf("||\t  - [Left Shift]: run\t\t\t\t\t||\n");
+	printf("||\t  - [Left Cmd]  : walk slowly\t\t\t\t||\n");
 	printf("=====================================");
 	printf("=============================\n");
 }
@@ -567,19 +571,13 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	else
-	{
-		printf("ARG ERROR\n");
-		return (1);
-	}
-	if (cube != NULL && printf("plop\n"))
+		return (write(2, "ARG ERROR\n", 10));
+	if (cube != NULL)
 		ft_graphic(cube);
 	else
-	{
-		printf("ERROR\n");
-		free(cube);
-		system("leaks cub3d");
-		return (1);
-	}
+		return (write(2, "ERROR\n", 6));
+	ft_freeall(cube, 0);
+	cube = 0;
 	system("leaks cub3d");
 	return (0);
 }

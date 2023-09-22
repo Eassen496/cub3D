@@ -6,7 +6,7 @@
 /*   By: abitonti <abitonti@student.42mulhouse.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 03:17:43 by abitonti          #+#    #+#             */
-/*   Updated: 2023/09/21 05:04:17 by abitonti         ###   ########.fr       */
+/*   Updated: 2023/09/23 01:03:26 by abitonti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,10 +76,28 @@ void ft_hook(void* param)
 
 void	textinit(t_cube *cube)
 {
-	cube->textures[0] = mlx_texture_to_image(cube->mlx, mlx_load_png(cube->source->north));
-	cube->textures[1] = mlx_texture_to_image(cube->mlx, mlx_load_png(cube->source->south));
-	cube->textures[2] = mlx_texture_to_image(cube->mlx, mlx_load_png(cube->source->west));
-	cube->textures[3] = mlx_texture_to_image(cube->mlx, mlx_load_png(cube->source->east));
+	mlx_texture_t	*texture;
+
+	texture = mlx_load_png(cube->source->north);
+	if (!texture && write(2, "Error loading texture file\n", 27))
+		exit (ft_freeall(cube, 0));
+	cube->textures[0] = mlx_texture_to_image(cube->mlx, texture);
+	mlx_delete_texture(texture);
+	texture = mlx_load_png(cube->source->south);
+	if (!texture && write(2, "Error loading texture file\n", 27))
+		exit (ft_freeall(cube, 0));
+	cube->textures[1] = mlx_texture_to_image(cube->mlx, texture);
+	mlx_delete_texture(texture);
+	texture = mlx_load_png(cube->source->west);
+	if (!texture && write(2, "Error loading texture file\n", 27))
+		exit (ft_freeall(cube, 0));
+	cube->textures[2] = mlx_texture_to_image(cube->mlx, texture);
+	mlx_delete_texture(texture);
+	texture = mlx_load_png(cube->source->east);
+	if (!texture && write(2, "Error loading texture file\n", 27))
+		exit (ft_freeall(cube, 0));
+	cube->textures[3] = mlx_texture_to_image(cube->mlx, texture);
+	mlx_delete_texture(texture);
 }
 
 static void	drawline(mlx_image_t *image, int *a, int *b)
@@ -303,9 +321,10 @@ void	ft_displaybackground(void *param)
 	}
 }
 
+
+
 void ft_graphic(t_cube *cube)
 {
-	printf("ok\n");
 	cube->map = cube->utils.map;
 	cube->mapwidth = cube->utils.lenght;
 	cube->mapheight = cube->utils.height;
@@ -315,11 +334,7 @@ void ft_graphic(t_cube *cube)
 	cube->imap = mlx_new_image(cube->mlx, cube->mlx->width / 2, cube->mlx->width * cube->mapheight / (cube->mapwidth * 2));
 	mlx_image_to_window(cube->mlx, cube->image, 0, 0);
 	mlx_image_to_window(cube->mlx, cube->imap, 0, 0);
-	//ft_randomize(cube);
-	//mlx_loop_hook(mlx, ft_randomize, mlx);
 	//mlx_resize_hook(mlx, ft_resize, );
-	//ft_displaymap(cube);
-	printf("ok\n");
 	mlx_set_cursor_mode(cube->mlx, MLX_MOUSE_HIDDEN);
 	mlx_loop_hook(cube->mlx, ft_displaybackground, cube);
 	mlx_loop_hook(cube->mlx, ft_displayworld, cube);
@@ -327,4 +342,5 @@ void ft_graphic(t_cube *cube)
 	mlx_loop_hook(cube->mlx, ft_hook, cube);
 	mlx_loop(cube->mlx);
 	mlx_terminate(cube->mlx);
+	cube->mlx = 0;
 }

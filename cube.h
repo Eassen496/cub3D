@@ -6,7 +6,7 @@
 /*   By: abitonti <abitonti@student.42mulhouse.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 21:11:39 by ale-roux          #+#    #+#             */
-/*   Updated: 2023/09/21 04:18:55 by abitonti         ###   ########.fr       */
+/*   Updated: 2023/09/23 00:27:05 by abitonti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,21 +42,6 @@ typedef struct s_source
 	uint32_t	ceiling;
 }				t_source;
 
-
-/*typedef struct s_texture
-{
-	int			height;
-	int			width;
-	uint32_t	**mat;
-}				t_texture;*/
-
-/*typedef struct s_point
-{
-	float		distance;
-	int			height;
-	uint32_t	*column;
-}				t_point;*/
-
 typedef struct s_point
 {
 	float			distance;
@@ -82,5 +67,6 @@ typedef struct s_cube
 
 char	*get_next_line(int fd);
 void	ft_graphic(t_cube *cube);
+int		ft_freeall(t_cube *cube, char *str);
 
 #endif
