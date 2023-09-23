@@ -6,7 +6,7 @@
 /*   By: abitonti <abitonti@student.42mulhouse.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 21:11:39 by ale-roux          #+#    #+#             */
-/*   Updated: 2023/09/23 00:27:05 by abitonti         ###   ########.fr       */
+/*   Updated: 2023/09/23 02:30:38 by abitonti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ typedef struct s_cube
 	int				ypos;
 	int				angle;
 	mlx_image_t		*textures[4];
+	bool			resize;
 }					t_cube;
 
 char	*get_next_line(int fd);

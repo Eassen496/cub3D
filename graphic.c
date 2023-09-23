@@ -6,7 +6,7 @@
 /*   By: abitonti <abitonti@student.42mulhouse.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 03:17:43 by abitonti          #+#    #+#             */
-/*   Updated: 2023/09/23 01:03:26 by abitonti         ###   ########.fr       */
+/*   Updated: 2023/09/23 03:07:17 by abitonti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -235,6 +235,33 @@ void	ft_displayme(t_cube *cube, int size)
 	drawline(cube->imap, a, b);
 }
 
+void	ft_mapsize(t_cube	*cube, int res[2])
+{
+	int	mapsize[2];
+
+	if (cube->mlx->width / cube->mlx->height > cube->mapwidth / cube->mapheight)
+	{
+		mapsize[1] = cube->mlx->height / 2;
+		mapsize[0] = mapsize[1] * cube->mapwidth / cube->mapheight;
+	}
+	else
+	{
+		mapsize[0] = cube->mlx->width / 2;
+		mapsize[1] = mapsize[0] * cube->mapheight / cube->mapwidth;
+	}
+	if (res)
+	{
+		res[0] = mapsize[0];
+		res[1] = mapsize[1];
+	}
+	else
+	{
+		mlx_resize_image(cube->image, cube->mlx->width, cube->mlx->height);
+		mlx_resize_image(cube->imap, mapsize[0], mapsize[1]);
+		cube->resize = false;
+	}
+}
+
 void	ft_displaymap(void *param)
 {
 	uint32_t	x;
@@ -244,6 +271,8 @@ void	ft_displaymap(void *param)
 	t_cube		*cube;
 
 	cube = (t_cube *) param;
+	if (cube->resize)
+		ft_mapsize(cube, 0);
 	y = -1;
 	while (++y < cube->imap->height)
 	{
@@ -282,7 +311,7 @@ void	ft_drawcol(t_cube *cube,t_point point, uint32_t x)
 	uint32_t	y;
 	int			h;
 
-	height = 2 * cube->image->height * atan(500 / point.distance) * 8 / (3 * M_PI);
+	height = 2 * cube->image->height * atan(500 / point.distance) * 2 * cube->mlx->width / (cube->mlx->height * M_PI);
 	i = -1;
 	while (++i < height)
 	{
@@ -334,24 +363,36 @@ void	ft_displaybackground(void *param)
 }
 
 
+void	ft_resizehook(int32_t width, int32_t height, void *param)
+{
+	t_cube	*cube;
+
+	(void) height;
+	(void) width;
+	cube = (t_cube *) param;
+	cube->resize = true;
+}
 
 void ft_graphic(t_cube *cube)
 {
+	int	mapsize[2];
+
 	cube->map = cube->utils.map;
 	cube->mapwidth = cube->utils.lenght;
 	cube->mapheight = cube->utils.height;
 	cube->mlx = mlx_init(WIDTH, HEIGHT, "cub3D", 1);
 	textinit(cube);
 	cube->image = mlx_new_image(cube->mlx, cube->mlx->width, cube->mlx->height);
-	cube->imap = mlx_new_image(cube->mlx, cube->mlx->width / 2, cube->mlx->width * cube->mapheight / (cube->mapwidth * 2));
+	ft_mapsize(cube, mapsize);
+	cube->imap = mlx_new_image(cube->mlx, mapsize[0], mapsize[1]);
 	mlx_image_to_window(cube->mlx, cube->image, 0, 0);
 	mlx_image_to_window(cube->mlx, cube->imap, 0, 0);
-	//mlx_resize_hook(mlx, ft_resize, );
 	mlx_set_cursor_mode(cube->mlx, MLX_MOUSE_HIDDEN);
 	mlx_loop_hook(cube->mlx, ft_displaybackground, cube);
 	mlx_loop_hook(cube->mlx, ft_displayworld, cube);
 	mlx_loop_hook(cube->mlx, ft_displaymap, cube);
 	mlx_loop_hook(cube->mlx, ft_hook, cube);
+	mlx_resize_hook(cube->mlx, ft_resizehook, cube);
 	mlx_loop(cube->mlx);
 	mlx_terminate(cube->mlx);
 	cube->mlx = 0;
