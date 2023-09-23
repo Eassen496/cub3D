@@ -1,3 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   struct.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ale-roux <ale-roux@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/23 21:19:57 by ale-roux          #+#    #+#             */
+/*   Updated: 2023/09/24 01:38:07 by ale-roux         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../include/cube.h"
+
 int	ft_freeall(t_cube *cube, char *str)
 {
 	int	i;
@@ -96,21 +110,4 @@ uint32_t	ft_source_filling(char *line)
 	while (line[i] <= '9' && line[i] >= '0')
 		ret[j] = (ret[j] * 10) + line[i++] - 48;
 	return (ft_uint32(ret[0], ret[1], ret[2], ret));
-}
-
-void	map_calculator(t_cube *cube, char *map)
-{
-	int	i;
-	int	lenght;
-
-	i = 0;
-	while (map[i])
-	{
-		lenght = 0;
-		while (map[i] && map[i++] != '\n')
-			lenght++;
-		if (cube->utils.lenght < lenght)
-			cube->utils.lenght = lenght;
-		cube->utils.height++;
-	}
 }

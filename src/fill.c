@@ -1,3 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   fill.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ale-roux <ale-roux@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/23 21:19:57 by ale-roux          #+#    #+#             */
+/*   Updated: 2023/09/24 01:37:57 by ale-roux         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../include/cube.h"
+
 void	finish_all(t_cube *cube)
 {
 	if (cube->source->north == NULL)
@@ -29,7 +43,7 @@ void	source_fill2(char *line, t_cube *cube)
 		cube->source->east = ft_strdup(ft_strchr(line, '.'));
 		cube->utils.i++;
 	}
-    free(line);
+	free(line);
 }
 
 void	source_fill(char *line, t_cube *cube)
@@ -49,7 +63,7 @@ void	source_fill(char *line, t_cube *cube)
 	{
 		cube->source->south = ft_strdup(ft_strchr(line, '.'));
 		cube->utils.i++;
-    }
+	}
 	else if (ft_strncmp(line, "WE ", 3) == 0 && cube->source->west == NULL)
 	{
 		cube->source->west = ft_strdup(ft_strchr(line, '.'));
