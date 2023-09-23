@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abitonti <abitonti@student.42mulhouse.f    +#+  +:+       +#+        */
+/*   By: ale-roux <ale-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 21:11:39 by ale-roux          #+#    #+#             */
-/*   Updated: 2023/09/23 02:30:38 by abitonti         ###   ########.fr       */
+/*   Updated: 2023/09/24 01:52:39 by ale-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,38 @@ typedef struct s_cube
 	bool			resize;
 }					t_cube;
 
-char	*get_next_line(int fd);
-void	ft_graphic(t_cube *cube);
-int		ft_freeall(t_cube *cube, char *str);
+char		*get_next_line(int fd);
+void		ft_graphic(t_cube *cube);
+int			ft_freeall(t_cube *cube, char *str);
+uint32_t	uintfree(int one, int two, int tree);
+uint32_t	ft_uint32(int one, int two, int tree, int *tab);
+int			ft_strlen(char *str);
+void		*ft_calloc(int memory);
+char		*tmpstr(t_cube *cube);
+char		*ft_strdup(char *s1);
+char		*ft_strrchr(char *s, int c);
+char		*ft_strchr(const char *s, int c);
+int			ft_strcmp(char *s1, char *s2);
+int			ft_strncmp(char *s1, char *s2, int n);
+void		free_strjoin(char *s1, char *s2, int opt);
+char		*empty_malloc(char *s1, char *s2, int opt);
+char		*cube_strjoin(char *s1, char *s2, int opt);
+char		*mapsplit(char *map, int lenght);
+int			ft_charfind(char *str, char c);
+void		*null_free(t_cube *cube);
+void		*nullreturn(int i);
+int			ft_open(char *arg);
+void		*fdfree(t_cube *cube);
+void		finish_all(t_cube *cube);
+void		source_fill2(char *line, t_cube *cube);
+void		source_fill(char *line, t_cube *cube);
+int			map_verif_bis(int x, int y, char **map);
+int			map_verif(char **map, int max_y, int max_x, t_cube *cube);
+int			map_formator(t_cube *cube, char *map);
+void		map_calculator(t_cube *cube, char *map);
+int			ft_freeall(t_cube *cube, char *str);
+t_source	*struct_init(t_cube *cube);
+int			startpos(t_cube *cube, int x, int y);
+uint32_t	ft_source_filling(char *line);
 
 #endif
