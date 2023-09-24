@@ -6,7 +6,7 @@
 /*   By: ale-roux <ale-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 21:19:57 by ale-roux          #+#    #+#             */
-/*   Updated: 2023/09/24 02:44:29 by ale-roux         ###   ########.fr       */
+/*   Updated: 2023/09/24 02:45:34 by ale-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ t_cube	*start(char *arg)
 	error = heeeeeelp(cube, fd, map, NULL);
 	if (error == 1)
 		return (NULL);
-
 	return (cube);
 }
 
