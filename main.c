@@ -6,11 +6,11 @@
 /*   By: ale-roux <ale-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 21:19:57 by ale-roux          #+#    #+#             */
-/*   Updated: 2023/09/24 02:45:34 by ale-roux         ###   ########.fr       */
+/*   Updated: 2023/09/24 03:28:54 by ale-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cube.h"
+#include "./include/cube.h"
 
 int	heeeeeelp(t_cube *cube, int fd, char *map, char *line)
 {
