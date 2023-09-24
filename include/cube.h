@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ale-roux <ale-roux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abitonti <abitonti@student.42mulhouse.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 21:11:39 by ale-roux          #+#    #+#             */
-/*   Updated: 2023/09/24 02:03:35 by ale-roux         ###   ########.fr       */
+/*   Updated: 2023/09/24 03:22:45 by abitonti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,8 @@ typedef struct s_cube
 	mlx_image_t		*image;
 	t_source		*source;
 	t_utils			utils;
-	int				mapwidth;
-	int				mapheight;
+	int				mw;
+	int				mh;
 	mlx_image_t		*imap;
 	char			**map;
 	int				xpos;
