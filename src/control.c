@@ -1,0 +1,98 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   control.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ale-roux <ale-roux@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/11 03:17:43 by abitonti          #+#    #+#             */
+/*   Updated: 2023/09/25 00:53:55 by ale-roux         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../include/cube.h"
+
+void	ft_mousehook(double xpos, double ypos, void *param)
+{
+	t_cube		*c;
+
+	(void) ypos;
+	c = (t_cube *) param;
+	if (!c->utils.mouse)
+		return ;
+	if (xpos < c->mlx->width / 2 - 5)
+	{
+		c->angle = (c->angle + 50) % 3600;
+		mlx_set_mouse_pos(c->mlx, c->mlx->width / 2, c->mlx->height / 2);
+	}
+	if (xpos > c->mlx->width / 2 + 5)
+	{
+		c->angle = (c->angle + 3550) % 3600;
+		mlx_set_mouse_pos(c->mlx, c->mlx->width / 2, c->mlx->height / 2);
+	}
+}
+
+void	ft_collision(t_cube *c, int dx, int dy)
+{
+	if (dx > 0 && c->map[c->ypos / 1000][(c->xpos + 200) / 1000] != '1')
+		c->xpos += dx;
+	if (dx < 0 && c->map[c->ypos / 1000][(c->xpos - 200) / 1000] != '1')
+		c->xpos += dx;
+	if (dy > 0 && c->map[(c->ypos + 200) / 1000][c->xpos / 1000] != '1')
+		c->ypos += dy;
+	if (dy < 0 && c->map[(c->ypos - 200) / 1000][c->xpos / 1000] != '1')
+		c->ypos += dy;
+}
+
+void	ft_move(t_cube *c, float speed, int dx, int dy)
+{
+	if (mlx_is_key_down(c->mlx, MLX_KEY_LEFT_SUPER))
+		speed = 0.5;
+	if (mlx_is_key_down(c->mlx, MLX_KEY_LEFT_SHIFT))
+		speed = 2.5;
+	if (mlx_is_key_down(c->mlx, MLX_KEY_W))
+	{
+		dy -= round(50 * sin(c->angle * M_PI / 1800) * speed);
+		dx += round(50 * cos(c->angle * M_PI / 1800) * speed);
+	}
+	if (mlx_is_key_down(c->mlx, MLX_KEY_S))
+	{
+		dy += round(50 * sin(c->angle * M_PI / 1800) * speed);
+		dx -= round(50 * cos(c->angle * M_PI / 1800) * speed);
+	}
+	if (mlx_is_key_down(c->mlx, MLX_KEY_A))
+	{
+		dy -= round(50 * cos(c->angle * M_PI / 1800) * speed);
+		dx -= round(50 * sin(c->angle * M_PI / 1800) * speed);
+	}
+	if (mlx_is_key_down(c->mlx, MLX_KEY_D))
+	{
+		dy += round(50 * cos(c->angle * M_PI / 1800) * speed);
+		dx += round(50 * sin(c->angle * M_PI / 1800) * speed);
+	}
+	ft_collision(c, dx, dy);
+}
+
+void	ft_hook(void *param)
+{
+	t_cube		*c;
+
+	c = (t_cube *) param;
+	if (mlx_is_key_down(c->mlx, MLX_KEY_ESCAPE))
+		mlx_close_window(c->mlx);
+	ft_move(c, 1, 0, 0);
+	if (mlx_is_key_down(c->mlx, MLX_KEY_LEFT))
+		c->angle = (c->angle + 80) % 3600;
+	if (mlx_is_key_down(c->mlx, MLX_KEY_RIGHT))
+		c->angle = (c->angle + 3520) % 3600;
+	if (mlx_is_key_down(c->mlx, MLX_KEY_SPACE) && c->utils.mouse == true)
+	{
+		c->utils.mouse = false;
+		mlx_set_cursor_mode(c->mlx, MLX_MOUSE_NORMAL);
+	}
+	else if (mlx_is_key_down(c->mlx, MLX_KEY_M) && c->utils.mouse == false)
+	{
+		c->utils.mouse = true;
+		mlx_set_cursor_mode(c->mlx, MLX_MOUSE_HIDDEN);
+	}
+}

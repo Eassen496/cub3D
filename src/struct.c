@@ -6,7 +6,7 @@
 /*   By: ale-roux <ale-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 21:19:57 by ale-roux          #+#    #+#             */
-/*   Updated: 2023/09/24 02:19:01 by ale-roux         ###   ########.fr       */
+/*   Updated: 2023/09/25 00:54:11 by ale-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,4 +80,30 @@ int	startpos(t_cube *cube, int x, int y)
 	cube->ypos = y * 1000 + 500;
 	cube->utils.map[y][x] = '0';
 	return (0);
+}
+
+void	textinit(t_cube *cube)
+{
+	mlx_texture_t	*texture;
+
+	texture = mlx_load_png(cube->source->north);
+	if (!texture && write(2, "Error loading texture file\n", 27))
+		exit (ft_freeall(cube, 0));
+	cube->textures[0] = mlx_texture_to_image(cube->mlx, texture);
+	mlx_delete_texture(texture);
+	texture = mlx_load_png(cube->source->south);
+	if (!texture && write(2, "Error loading texture file\n", 27))
+		exit (ft_freeall(cube, 0));
+	cube->textures[1] = mlx_texture_to_image(cube->mlx, texture);
+	mlx_delete_texture(texture);
+	texture = mlx_load_png(cube->source->west);
+	if (!texture && write(2, "Error loading texture file\n", 27))
+		exit (ft_freeall(cube, 0));
+	cube->textures[2] = mlx_texture_to_image(cube->mlx, texture);
+	mlx_delete_texture(texture);
+	texture = mlx_load_png(cube->source->east);
+	if (!texture && write(2, "Error loading texture file\n", 27))
+		exit (ft_freeall(cube, 0));
+	cube->textures[3] = mlx_texture_to_image(cube->mlx, texture);
+	mlx_delete_texture(texture);
 }

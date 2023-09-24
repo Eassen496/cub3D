@@ -6,7 +6,7 @@
 /*   By: ale-roux <ale-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 21:11:39 by ale-roux          #+#    #+#             */
-/*   Updated: 2023/09/25 00:46:32 by ale-roux         ###   ########.fr       */
+/*   Updated: 2023/09/25 00:59:11 by ale-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,5 +102,25 @@ int			startpos(t_cube *cube, int x, int y);
 uint32_t	ft_source_filling(char *line);
 float		ft_min(float a, float b);
 float		ft_max(float a, float b);
+void		ft_mousehook(double xpos, double ypos, void *param);
+void		ft_collision(t_cube *c, int dx, int dy);
+void		ft_move(t_cube *c, float speed, int dx, int dy);
+void		ft_hook(void *param);
+void		textinit(t_cube *cube);
+void		ft_displayworld(t_cube *cube);
+void		ft_displaybackground(t_cube *cube);
+void		ft_resizehook(int32_t width, int32_t height, void *param);
+void		ft_display(void *param);
+void		ft_graphic(t_cube *cube);
+void		drawline(mlx_image_t *image, int *a, int *b);
+int			ft_nextwhile_y(int x, int y, int s, t_cube *c);
+float		ft_nextwall_y(float a, t_cube *c, int s, t_point *p);
+int			ft_nextwhile_x(int x, int y, int s, t_cube *c);
+float		ft_nextwall_x(float a, t_cube *c, int s, t_point *p);
+void		ft_displayme(t_cube *c, int size);
+void		ft_mapsize(t_cube	*cube, int res[2]);
+void		ft_displaymap(t_cube *c, uint32_t x, uint32_t y);
+uint32_t	ft_color(uint32_t param);
+void		ft_drawcol(t_cube *c, t_point p, uint32_t x);
 
 #endif
