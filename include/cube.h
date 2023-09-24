@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abitonti <abitonti@student.42mulhouse.f    +#+  +:+       +#+        */
+/*   By: ale-roux <ale-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 21:11:39 by ale-roux          #+#    #+#             */
-/*   Updated: 2023/09/24 03:22:45 by abitonti         ###   ########.fr       */
+/*   Updated: 2023/09/25 00:46:32 by ale-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,5 +100,7 @@ int			ft_freeall(t_cube *cube, char *str);
 t_source	*struct_init(t_cube *cube);
 int			startpos(t_cube *cube, int x, int y);
 uint32_t	ft_source_filling(char *line);
+float		ft_min(float a, float b);
+float		ft_max(float a, float b);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: ale-roux <ale-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 21:19:57 by ale-roux          #+#    #+#             */
-/*   Updated: 2023/09/24 01:38:17 by ale-roux         ###   ########.fr       */
+/*   Updated: 2023/09/25 00:46:48 by ale-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,4 +28,18 @@ void	*fdfree(t_cube *cube)
 	free(cube);
 	printf("Please give a valid file :D\n");
 	return (NULL);
+}
+
+float	ft_min(float a, float b)
+{
+	if (a < b)
+		return (a);
+	return (b);
+}
+
+float	ft_max(float a, float b)
+{
+	if (a > b)
+		return (a);
+	return (b);
 }
