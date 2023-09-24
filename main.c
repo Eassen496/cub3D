@@ -6,23 +6,19 @@
 /*   By: ale-roux <ale-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 21:19:57 by ale-roux          #+#    #+#             */
-/*   Updated: 2023/09/24 01:46:02 by ale-roux         ###   ########.fr       */
+/*   Updated: 2023/09/24 02:44:29 by ale-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cube.h"
 
-int	*heeeeeelp(t_cube *cube, int fd, char *map)
+int	heeeeeelp(t_cube *cube, int fd, char *map, char *line)
 {
-	char	*line;
-
-	if (fd < 0)
-	{
-		fdfree(cube);
-		return (1);
-	}
 	while (cube->utils.i < 6)
-		source_fill(get_next_line(fd), cube);
+	{
+		line = get_next_line(fd);
+		source_fill(line, cube);
+	}
 	if (cube->utils.i == 7)
 	{
 		nullreturn(ft_freeall(cube, map));
@@ -36,15 +32,16 @@ int	*heeeeeelp(t_cube *cube, int fd, char *map)
 		line = get_next_line(fd);
 	}
 	map_calculator(cube, map);
-	close(fd);
+	if (map_formator(cube, map) == 1)
+		return (1);
 	return (0);
 }
 
 t_cube	*start(char *arg)
 {
 	t_cube	*cube;
-	int		fd;
 	int		error;
+	int		fd;
 	char	*map;
 
 	cube = malloc(sizeof(t_cube));
@@ -54,11 +51,13 @@ t_cube	*start(char *arg)
 	map = tmpstr(cube);
 	if (!cube->source)
 		return (null_free(cube));
-	error = heeeeeelp(ft_open(arg));
+	fd = ft_open(arg);
+	if (fd < 0)
+		return (fdfree(cube));
+	error = heeeeeelp(cube, fd, map, NULL);
 	if (error == 1)
 		return (NULL);
-	if (map_formator(cube, map) == 1)
-		return (NULL);
+
 	return (cube);
 }
 
