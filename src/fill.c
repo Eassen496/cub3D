@@ -6,7 +6,7 @@
 /*   By: ale-roux <ale-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 21:19:57 by ale-roux          #+#    #+#             */
-/*   Updated: 2023/09/24 01:37:57 by ale-roux         ###   ########.fr       */
+/*   Updated: 2023/09/24 02:35:16 by ale-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ void	source_fill2(char *line, t_cube *cube)
 		cube->source->east = ft_strdup(ft_strchr(line, '.'));
 		cube->utils.i++;
 	}
-	free(line);
 }
 
 void	source_fill(char *line, t_cube *cube)
@@ -71,4 +70,34 @@ void	source_fill(char *line, t_cube *cube)
 	}
 	else
 		source_fill2(line, cube);
+	free(line);
+}
+
+uint32_t	ft_source_filling(char *line)
+{
+	int			*ret;
+	int			i;
+	int			j;
+
+	i = 0;
+	j = 0;
+	ret = (int *)malloc(3 * sizeof(int));
+	if (!ret)
+		return (0);
+	ret[0] = 0;
+	ret[1] = 0;
+	ret[2] = 0;
+	while (line[i] > '9' || line[i] < '0')
+		i++;
+	while (line[i] <= '9' && line[i] >= '0')
+		ret[j] = (ret[j] * 10) + line[i++] - 48;
+	i++;
+	j++;
+	while (line[i] <= '9' && line[i] >= '0')
+		ret[j] = (ret[j] * 10) + line[i++] - 48;
+	j++;
+	i++;
+	while (line[i] <= '9' && line[i] >= '0')
+		ret[j] = (ret[j] * 10) + line[i++] - 48;
+	return (ft_uint32(ret[0], ret[1], ret[2], ret));
 }
