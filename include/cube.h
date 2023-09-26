@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ale-roux <ale-roux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abitonti <abitonti@student.42mulhouse.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 21:11:39 by ale-roux          #+#    #+#             */
-/*   Updated: 2023/09/26 03:44:49 by ale-roux         ###   ########.fr       */
+/*   Updated: 2023/09/27 00:31:20 by abitonti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,6 @@ typedef struct s_cube
 char		*get_next_line(int fd);
 void		ft_graphic(t_cube *cube);
 int			ft_freeall(t_cube *cube, char *str);
-uint32_t	uintfree(int one, int two, int tree);
-uint32_t	ft_uint32(int one, int two, int tree, int *tab);
 int			ft_strlen(char *str);
 void		*ft_calloc(int memory);
 char		*tmpstr(t_cube *cube);

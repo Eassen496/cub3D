@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fill.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ale-roux <ale-roux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abitonti <abitonti@student.42mulhouse.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 21:19:57 by ale-roux          #+#    #+#             */
-/*   Updated: 2023/09/26 04:20:22 by ale-roux         ###   ########.fr       */
+/*   Updated: 2023/09/27 00:48:51 by abitonti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	source_fill2(char *line, t_cube *cube)
 {
 	if (ft_strncmp(line, "F ", 2) == 0 && cube->utils.floor == false)
 	{
-		cube->source->floor = ft_source_filling(line, cube);
+		cube->source->floor = ft_source_filling(line + 2, cube);
 		if (cube->utils.i == 7)
 			return (finish_all(cube));
 		cube->utils.floor = true;
@@ -62,7 +62,7 @@ void	source_fill2(char *line, t_cube *cube)
 	}
 	else if (ft_strncmp(line, "C ", 2) == 0 && cube->utils.ceiling == false)
 	{
-		cube->source->ceiling = ft_source_filling(line, cube);
+		cube->source->ceiling = ft_source_filling(line + 2, cube);
 		if (cube->utils.i == 7)
 			return (finish_all(cube));
 		cube->utils.ceiling = true;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fill2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ale-roux <ale-roux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abitonti <abitonti@student.42mulhouse.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 21:19:57 by ale-roux          #+#    #+#             */
-/*   Updated: 2023/09/26 04:21:25 by ale-roux         ###   ########.fr       */
+/*   Updated: 2023/09/27 00:55:24 by abitonti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,44 +14,28 @@
 
 uint32_t	ft_source_filling(char *line, t_cube *cube)
 {
-	int			*ret;
+	int			ret[3];
 	int			i;
 	int			j;
 	int			save;
 
 	i = 0;
-	j = 0;
-	ret = (int *)malloc(3 * sizeof(int));
-	if (!ret)
-		return (0);
+	j = -1;
 	ret[0] = 0;
 	ret[1] = 0;
 	ret[2] = 0;
-	while (line[i] > '9' || line[i] < '0')
-		i++;
-	save = i;
-	while (line[i] <= '9' && line[i] >= '0')
-		ret[j] = (ret[j] * 10) + line[i++] - 48;
-	if (i == save)
-		ret[j] = -1;
-	i++;
-	save = i;
-	j++;
-	while (line[i] <= '9' && line[i] >= '0')
-		ret[j] = (ret[j] * 10) + line[i++] - 48;
-	if (i == save)
-		ret[j] = -1;
-	j++;
-	i++;
-	save = i;
-	while (line[i] <= '9' && line[i] >= '0')
-		ret[j] = (ret[j] * 10) + line[i++] - 48;
-	if (i == save)
-		ret[j] = -1;
-	if (ret[0] == -1 || ret[1] == -1 || ret[2] == -1)
+	while (++j < 3)
 	{
-		cube->utils.i = 7;
-		return (0);
+		save = i;
+		while (line[i] <= '9' && line[i] >= '0')
+			ret[j] = (ret[j] * 10) + line[i++] - 48;
+		if (i == save || ret[j] > 255)
+			break ;
+		if (!((line[i] == ',' && j < 2) || (line[i] == '\n' && j == 2)))
+			break ;
+		i++;
 	}
-	return (ft_uint32(ret[0], ret[1], ret[2], ret));
+	if (j < 3)
+		return (cube->utils.i = 7);
+	return (ret[0] << 24 | ret[1] << 16 | ret[2] << 8 | 255);
 }
