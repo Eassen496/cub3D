@@ -6,7 +6,7 @@
 /*   By: ale-roux <ale-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 03:17:43 by abitonti          #+#    #+#             */
-/*   Updated: 2023/09/26 03:16:50 by ale-roux         ###   ########.fr       */
+/*   Updated: 2023/09/26 23:59:28 by ale-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,4 +97,8 @@ void	ft_hook(void *param)
 	}
 	if (mlx_is_key_down(c->mlx, MLX_KEY_F))
 		c->anim = 1;
+	if (mlx_is_key_down(c->mlx, MLX_KEY_O))
+		c->imap->enabled = false;
+	if (mlx_is_key_down(c->mlx, MLX_KEY_P))
+		c->imap->enabled = true;
 }
