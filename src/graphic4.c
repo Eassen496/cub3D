@@ -39,17 +39,17 @@ void	animated_init1(t_cube *cube)
 	animated_init2(cube);
 }
 
-void	start_anim(t_cube *cube)
+void	start_anim(t_cube *c)
 {
-	mlx_resize_image(cube->animation[cube->anim - 1], WIDTH, HEIGHT);
-	mlx_image_to_window(cube->mlx, cube->animation[cube->anim - 1], 0, 0);
-	cube->animation[cube->anim - 1]->enabled = true;
-	cube->anim++;
-	if (cube->anim == 23)
+	mlx_resize_image(c->animation[c->anim - 1], c->mlx->width, c->mlx->height);
+	mlx_image_to_window(c->mlx, c->animation[c->anim - 1], 0, 0);
+	c->animation[c->anim - 1]->enabled = true;
+	c->anim++;
+	if (c->anim == 23)
 	{
-		mlx_image_to_window(cube->mlx, cube->image, 0, 0);
-		mlx_image_to_window(cube->mlx, cube->imap, 0, 0);
-		cube->anim = 0;
+		mlx_image_to_window(c->mlx, c->image, 0, 0);
+		mlx_image_to_window(c->mlx, c->imap, 0, 0);
+		c->anim = 0;
 	}
 }
 
