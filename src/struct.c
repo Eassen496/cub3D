@@ -6,7 +6,7 @@
 /*   By: ale-roux <ale-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 21:19:57 by ale-roux          #+#    #+#             */
-/*   Updated: 2023/09/25 00:54:11 by ale-roux         ###   ########.fr       */
+/*   Updated: 2023/09/26 03:46:24 by ale-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ int	ft_freeall(t_cube *cube, char *str)
 		mlx_terminate(cube->mlx);
 	while (i < cube->utils.height)
 		free(cube->utils.map[i++]);
-	free(cube->utils.map);
+	if (cube->utils.map != NULL)
+		free(cube->utils.map);
 	free(cube->source->north);
 	free(cube->source->south);
 	free(cube->source->west);
@@ -57,6 +58,7 @@ t_source	*struct_init(t_cube *cube)
 	cube->utils.floor = false;
 	cube->utils.ceiling = false;
 	cube->utils.mouse = true;
+	cube->anim = 0;
 	return (source);
 }
 

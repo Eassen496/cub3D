@@ -6,7 +6,7 @@
 /*   By: ale-roux <ale-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 03:17:43 by abitonti          #+#    #+#             */
-/*   Updated: 2023/09/25 00:51:35 by ale-roux         ###   ########.fr       */
+/*   Updated: 2023/09/26 03:00:26 by ale-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,12 +71,15 @@ void	ft_display(void *param)
 void	ft_graphic(t_cube *cube)
 {
 	int	mapsize[2];
+	int	i;
 
+	i = 0;
 	cube->map = cube->utils.map;
 	cube->mw = cube->utils.lenght;
 	cube->mh = cube->utils.height;
 	cube->mlx = mlx_init(WIDTH, HEIGHT, "cub3D", 1);
 	textinit(cube);
+	animated_init1(cube);
 	cube->image = mlx_new_image(cube->mlx, cube->mlx->width, cube->mlx->height);
 	ft_mapsize(cube, mapsize);
 	cube->imap = mlx_new_image(cube->mlx, mapsize[0], mapsize[1]);
@@ -85,6 +88,7 @@ void	ft_graphic(t_cube *cube)
 	mlx_set_cursor_mode(cube->mlx, MLX_MOUSE_HIDDEN);
 	mlx_loop_hook(cube->mlx, ft_display, cube);
 	mlx_loop_hook(cube->mlx, ft_hook, cube);
+	mlx_loop_hook(cube->mlx, hook_animation, cube);
 	mlx_cursor_hook(cube->mlx, ft_mousehook, cube);
 	mlx_resize_hook(cube->mlx, ft_resizehook, cube);
 	mlx_loop(cube->mlx);

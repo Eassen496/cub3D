@@ -6,7 +6,7 @@
 /*   By: ale-roux <ale-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 03:17:43 by abitonti          #+#    #+#             */
-/*   Updated: 2023/09/25 00:53:55 by ale-roux         ###   ########.fr       */
+/*   Updated: 2023/09/26 03:16:50 by ale-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,9 @@ void	ft_collision(t_cube *c, int dx, int dy)
 void	ft_move(t_cube *c, float speed, int dx, int dy)
 {
 	if (mlx_is_key_down(c->mlx, MLX_KEY_LEFT_SUPER))
-		speed = 0.5;
+		speed = 0.75;
 	if (mlx_is_key_down(c->mlx, MLX_KEY_LEFT_SHIFT))
-		speed = 2.5;
+		speed = 3;
 	if (mlx_is_key_down(c->mlx, MLX_KEY_W))
 	{
 		dy -= round(50 * sin(c->angle * M_PI / 1800) * speed);
@@ -80,7 +80,7 @@ void	ft_hook(void *param)
 	c = (t_cube *) param;
 	if (mlx_is_key_down(c->mlx, MLX_KEY_ESCAPE))
 		mlx_close_window(c->mlx);
-	ft_move(c, 1, 0, 0);
+	ft_move(c, 1.5, 0, 0);
 	if (mlx_is_key_down(c->mlx, MLX_KEY_LEFT))
 		c->angle = (c->angle + 80) % 3600;
 	if (mlx_is_key_down(c->mlx, MLX_KEY_RIGHT))
@@ -95,4 +95,6 @@ void	ft_hook(void *param)
 		c->utils.mouse = true;
 		mlx_set_cursor_mode(c->mlx, MLX_MOUSE_HIDDEN);
 	}
+	if (mlx_is_key_down(c->mlx, MLX_KEY_F))
+		c->anim = 1;
 }

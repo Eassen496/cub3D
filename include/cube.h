@@ -6,7 +6,7 @@
 /*   By: ale-roux <ale-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 21:11:39 by ale-roux          #+#    #+#             */
-/*   Updated: 2023/09/25 00:59:11 by ale-roux         ###   ########.fr       */
+/*   Updated: 2023/09/26 03:44:49 by ale-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,8 @@ typedef struct s_cube
 	int				ypos;
 	int				angle;
 	mlx_image_t		*textures[4];
+	mlx_image_t		*animation[23];
+	int				anim;
 	bool			resize;
 }					t_cube;
 
@@ -99,7 +101,7 @@ void		map_calculator(t_cube *cube, char *map);
 int			ft_freeall(t_cube *cube, char *str);
 t_source	*struct_init(t_cube *cube);
 int			startpos(t_cube *cube, int x, int y);
-uint32_t	ft_source_filling(char *line);
+uint32_t	ft_source_filling(char *line, t_cube *cube);
 float		ft_min(float a, float b);
 float		ft_max(float a, float b);
 void		ft_mousehook(double xpos, double ypos, void *param);
@@ -122,5 +124,9 @@ void		ft_mapsize(t_cube	*cube, int res[2]);
 void		ft_displaymap(t_cube *c, uint32_t x, uint32_t y);
 uint32_t	ft_color(uint32_t param);
 void		ft_drawcol(t_cube *c, t_point p, uint32_t x);
+void		animated_init1(t_cube *cube);
+void		show_animation(t_cube *cube);
+void		hook_animation(void *param);
+void		animated_init2(t_cube *cube);
 
 #endif
