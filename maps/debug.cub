@@ -1,0 +1,16 @@
+SO ./images/texture/debug_south.png
+NO ./images/texture/debug_north.png
+EA ./images/texture/debug_east.png
+WE ./images/texture/debug_west.png
+
+F 30,30,30
+C 30,30,200
+
+11111
+10001
+10101
+10001
+11D11
+10001
+10001
+11111
