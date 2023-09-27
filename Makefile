@@ -12,12 +12,14 @@ NAME	= cub3d
 	gcc ${CFLAGS} -c $< -o ${<:.c=.o}
 
 all		: ${NAME}
+	make -C ./MLX42/build
 
 ${NAME}	: ${OBJS}
 	gcc ${OBJS} ${LIBMLX} ${LIBGLFW} ${CFLAGS} -o ${NAME}
 
 clean	:
 	rm -rf ${OBJS}
+	make clean -C ./MLX42/build
 
 fclean	: clean
 	rm -rf ${NAME}
