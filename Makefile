@@ -23,7 +23,8 @@ setup	:
 	@echo "setup complete"
 
 rebuild	:
-	rm -rf ./MLX42/build
+	@rm -rf ./MLX42/build
+	@echo "rebuilding source..."
 	make setup
 
 ${NAME}	: ${OBJS}
