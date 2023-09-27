@@ -17,6 +17,15 @@ all		:
 
 cube	: ${NAME}
 
+setup	:
+	$(shell mkdir MLX42/build &>/dev/null)
+	$(shell cmake -S ./MLX42 -B ./MLX42/build &>/dev/null)
+	@echo "setup complete"
+
+rebuild	:
+	rm -rf ./MLX42/build
+	make setup
+
 ${NAME}	: ${OBJS}
 	gcc ${OBJS} ${LIBMLX} ${LIBGLFW} ${CFLAGS} -o ${NAME}
 
