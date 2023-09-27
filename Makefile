@@ -4,15 +4,18 @@ SRC		= main.c ./src/get_next_line.c ./src/graphic1.c ./src/graphic2.c ./src/grap
 OBJS	= ${SRC:.c=.o}
 CC		= gcc
 CFLAGS	= -Wall -Wextra -Werror
-LIBMLX	= libmlx42.a
+LIBMLX	= ./MLX42/build/libmlx42.a
 LIBGLFW	= -lglfw -L"/Users/${USER}/.brew/opt/glfw/lib/"
 NAME	= cub3d
 
 .c.o	:
 	gcc ${CFLAGS} -c $< -o ${<:.c=.o}
 
-all		: ${NAME}
+all		: 
 	make -C ./MLX42/build
+	make cube
+
+cube	: ${NAME}
 
 ${NAME}	: ${OBJS}
 	gcc ${OBJS} ${LIBMLX} ${LIBGLFW} ${CFLAGS} -o ${NAME}
