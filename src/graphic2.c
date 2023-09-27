@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   graphic2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ale-roux <ale-roux@student.42.fr>          +#+  +:+       +#+        */
+/*   By: abitonti <abitonti@student.42mulhouse.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 03:17:43 by abitonti          #+#    #+#             */
-/*   Updated: 2023/09/25 00:57:02 by ale-roux         ###   ########.fr       */
+/*   Updated: 2023/09/27 02:28:22 by abitonti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,9 @@ float	ft_nextwall_y(float a, t_cube *c, int s, t_point *p)
 	}
 	if (p && p->distance > (c->ypos - y) / sin(a * M_PI / 1800))
 	{
-		p->distance = (c->ypos - y) / sin(a * M_PI / 1800);
-		p->texture = c->textures[1 + s];
-		p->x = (x % 1000) * p->texture->width / 1000;
+	p->distance = (c->ypos - y) / sin(a * M_PI / 1800);
+	p->texture = c->textures[1 + s];
+	p->x = (999 * (s + 1) - (1 + 2 * s) * x % 1000) * p->texture->width / 1000;
 	}
 	return ((c->ypos - y) / sin(a * M_PI / 1800));
 }
@@ -110,7 +110,7 @@ float	ft_nextwall_x(float a, t_cube *c, int s, t_point *p)
 	{
 		p->distance = (x - c->xpos) / cos(a * M_PI / 1800);
 		p->texture = c->textures[3 + s];
-		p->x = (y % 1000) * p->texture->width / 1000;
+		p->x = (s * -999 + (1 + 2 * s) * (y % 1000)) * p->texture->width / 1000;
 	}
 	return ((x - c->xpos) / cos(a * M_PI / 1800));
 }
