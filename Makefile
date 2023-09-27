@@ -27,6 +27,9 @@ rebuild	:
 	@echo "rebuilding source..."
 	make setup
 
+basic	:
+	@rm -rf ./MLX42/build
+
 ${NAME}	: ${OBJS}
 	gcc ${OBJS} ${LIBMLX} ${LIBGLFW} ${CFLAGS} -o ${NAME}
 
@@ -35,6 +38,7 @@ clean	:
 	make clean -C ./MLX42/build
 
 fclean	: clean
+	@make basic
 	rm -rf ${NAME}
 
 re		: fclean all
