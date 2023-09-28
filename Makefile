@@ -12,6 +12,7 @@ NAME	= cub3d
 	gcc ${CFLAGS} -c $< -o ${<:.c=.o}
 
 all		: 
+	make setup
 	make -C ./MLX42/build
 	make cube
 
