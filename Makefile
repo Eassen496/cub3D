@@ -5,7 +5,7 @@ OBJS	= ${SRC:.c=.o}
 CC		= gcc
 CFLAGS	= -Wall -Wextra -Werror
 LIBMLX	= ./MLX42/build/libmlx42.a
-LIBGLFW	= -lglfw -L"/Users/${USER}/.brew/opt/glfw/lib/"
+LIBGLFW	= -lm -lglfw -L"/Users/${USER}/.brew/opt/glfw/lib/"
 NAME	= cub3d
 
 .c.o	:

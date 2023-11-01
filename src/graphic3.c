@@ -6,7 +6,7 @@
 /*   By: ale-roux <ale-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 03:17:43 by abitonti          #+#    #+#             */
-/*   Updated: 2023/09/25 00:51:23 by ale-roux         ###   ########.fr       */
+/*   Updated: 2023/11/01 07:10:05 by ale-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ void	ft_drawcol(t_cube *c, t_point p, uint32_t x)
 	{
 		y = ((int) c->image->height - height) / 2 + i;
 		h = i * p.texture->height / height;
-		if (y >= 0 && y < c->image->height)
+		if (y < c->image->height)
 			mlx_put_pixel(c->image, x, y, ft_color(((uint32_t *)
 						p.texture->pixels)[p.x + h * p.texture->width]));
 	}

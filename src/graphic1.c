@@ -6,7 +6,7 @@
 /*   By: ale-roux <ale-roux@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 03:17:43 by abitonti          #+#    #+#             */
-/*   Updated: 2023/09/26 03:00:26 by ale-roux         ###   ########.fr       */
+/*   Updated: 2023/11/01 07:08:46 by ale-roux         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,7 @@ void	ft_display(void *param)
 void	ft_graphic(t_cube *cube)
 {
 	int	mapsize[2];
-	int	i;
 
-	i = 0;
 	cube->map = cube->utils.map;
 	cube->mw = cube->utils.lenght;
 	cube->mh = cube->utils.height;
